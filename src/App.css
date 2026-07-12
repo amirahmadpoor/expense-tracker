@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'vazir-r';
+    src: url(/public/fonts/vazirmatn/Vazirmatn-Regular.ttf);
+}
+@font-face {
+    font-family: 'vazir-m';
+    src: url(/public/fonts/vazirmatn/Vazirmatn-Medium.ttf);
+}
+@font-face {
+    font-family: 'vazir-b';
+    src: url(/public/fonts/vazirmatn/Vazirmatn-ExtraBold.ttf);
+}
