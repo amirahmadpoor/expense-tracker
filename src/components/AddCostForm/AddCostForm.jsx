@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import RecentTransactions from '../RecentTransactions/RecentTransactions';
 
 function AddCostForm({ costs, setCosts }) {
+    const today = new Date().toISOString().split("T")[0];
     const [desc, setDesc] = useState('');
     const [price, setPrice] = useState('');
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(today);
     const [openType, setOpenType] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
-    const today = new Date().toISOString().split("T")[0];
     const typeCost = [
         'هزینه', 'درآمد'
     ]
@@ -120,7 +120,7 @@ function AddCostForm({ costs, setCosts }) {
                     <input
                         type="date"
                         id='date'
-                        defaultValue={today}
+                        value={date}
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setDate(e.target.value)}
                     />
