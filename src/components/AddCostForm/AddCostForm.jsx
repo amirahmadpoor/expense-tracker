@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import RecentTransactions from '../RecentTransactions/RecentTransactions';
 
-function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllIncome }) {
+function AddCostForm({ costs, setCosts }) {
     const [desc, setDesc] = useState('');
     const [price, setPrice] = useState('');
     const [type, setType] = useState('');
@@ -10,22 +10,16 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
     const [openType, setOpenType] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
-    const today = new Date();
+    const today = new Date().toISOString().split("T")[0];
     const typeCost = [
         'هزینه', 'درآمد'
     ]
     const categories = [
-        'غذا', 'حمل و نقل قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
+        'غذا', 'حمل و نقل', ' قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
     ]
 
-
     const handleAddCost = () => {
-        setCosts([...costs, { desc, price, type, category, date }]);
-        if (type === 'هزینه') {
-            setAllBuy(Number(allBuy + price))
-        } else {
-            setAllIncome(Number(allIncome + price))
-        }
+        setCosts([...costs, { id: crypto.randomUUID(), desc, price, type, category, date }]);
     }
 
 
@@ -45,6 +39,7 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                     <input
                         type="text"
                         id='description'
+                        required
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setDesc(e.target.value)}
                     />
@@ -54,6 +49,7 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                     <input
                         type="number"
                         id='price'
+                        required
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setPrice(e.target.value)}
                     />
@@ -66,8 +62,8 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         value={type}
                         onClick={() => {
-                            setOpenType(!openType)
-                            setOpenCategories(false)
+                            setOpenType(!openType);
+                            setOpenCategories(false);
                         }}
                     />
                     {openType &&
@@ -79,9 +75,9 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                                         ${selectType === type ? 'bg-gray-200' : 'hover:bg-gray-200'}
                                         `}
                                     onClick={() => {
-                                        setType(type)
-                                        setOpenType(false)
-                                        setSelectType(type)
+                                        setType(type);
+                                        setOpenType(false);
+                                        setSelectType(type);
                                     }}
                                 >
                                     {type}
@@ -97,8 +93,8 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         value={category}
                         onClick={() => {
-                            setOpenCategories(!openCategories)
-                            setOpenType(false)
+                            setOpenCategories(!openCategories);
+                            setOpenType(false);
                         }}
                     />
                     {openCategories &&
@@ -110,8 +106,8 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                                         ${selectType === category ? 'bg-gray-200' : 'hover:bg-gray-200'}
                                         `}
                                     onClick={() => {
-                                        setCategory(category)
-                                        setOpenCategories(false)
+                                        setCategory(category);
+                                        setOpenCategories(false);
                                     }}
                                 >
                                     {category}
@@ -124,7 +120,7 @@ function AddCostForm({ costs, setCosts, allBuy, setAllBuy, allIncome, setAllInco
                     <input
                         type="date"
                         id='date'
-                        // value={today.getDate()}
+                        defaultValue={today}
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setDate(e.target.value)}
                     />

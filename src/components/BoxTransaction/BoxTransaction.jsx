@@ -1,7 +1,7 @@
 import { Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import React from 'react'
 
-function BoxTransaction({ desc, price, type, category, date}) {
+function BoxTransaction({ id, desc, price, type, category, date, removeCost }) {
     return (
         <div className='box flex justify-between bg-gray-100 p-3 rounded-lg'>
             <div className="box__right flex items-center gap-2">
@@ -37,9 +37,11 @@ function BoxTransaction({ desc, price, type, category, date}) {
                     `}>
                     {Number(price).toLocaleString("fa-IR")} تومان
                 </span>
-                <span className="box__trash text-red-600">
+                <button className="box__trash text-red-600"
+                    onClick={() => removeCost(id)}
+                >
                     <Trash width={20} />
-                </span>
+                </button>
             </div>
         </div>
     )

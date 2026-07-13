@@ -6,8 +6,20 @@ import { TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 
 function App() {
   const [costs, setCosts] = useState([]);
-  const [allBuy, setAllBuy] = useState('');
-  const [allIncome, setAllIncome] = useState('');
+  const allBuy = costs
+    .filter(cost => cost.type === "هزینه")
+    .reduce((sum, cost) => sum + Number(cost.price), 0);
+
+  const allIncome = costs
+    .filter(cost => cost.type === "درآمد")
+    .reduce((sum, cost) => sum + Number(cost.price), 0);
+
+  const balance = allIncome - allBuy;
+
+  const removeCost = (id) => {
+    const constsFiltered = costs.filter(cost => cost.id !== id)
+    setCosts(constsFiltered)
+  }
 
   return (
     <>
@@ -32,7 +44,7 @@ function App() {
             <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-lg p-4">
               <div className="box__title-price flex flex-col">
                 <span className='box__title'>کل در آمد</span>
-                <span className='box__price text-green-600'>{allIncome ? Number(allIncome).toLocaleString('fa-IR') : 0} تومان</span>
+                <span className='box__price text-green-600'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
               </div>
               <div className='box__icon p-4 rounded-full bg-green-200 text-green-600'><TrendingUp /></div>
             </div>
@@ -40,7 +52,7 @@ function App() {
             <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-lg p-4">
               <div className="box__title-price flex flex-col">
                 <span className='box__title'>کل هزینه</span>
-                <span className='box__price text-red-600'>{allBuy ? Number(allBuy).toLocaleString('fa-IR') : 0} تومان</span>
+                <span className='box__price text-red-600'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
               </div>
               <div className='box__icon p-4 rounded-full bg-red-200 text-red-600'><TrendingDown /></div>
             </div>
@@ -59,14 +71,11 @@ function App() {
           <AddCostForm
             costs={costs}
             setCosts={setCosts}
-            allBuy={allBuy}
-            setAllBuy={setAllBuy}
-            allIncome={allIncome}
-            setAllIncome={setAllIncome}
           />
 
           <RecentTransactions
             costs={costs}
+            removeCost={removeCost}
           />
         </div>
       </div>
