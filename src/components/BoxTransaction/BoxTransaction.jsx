@@ -38,7 +38,9 @@ function BoxTransaction({ id, desc, price, type, category, date, removeCost }) {
                     {Number(price).toLocaleString("fa-IR")} تومان
                 </span>
                 <button className="box__trash text-red-600"
-                    onClick={() => removeCost(id)}
+                    onClick={() => {
+                        removeCost(id)
+                    }}
                 >
                     <Trash width={20} />
                 </button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
@@ -6,6 +6,7 @@ import { TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 
 function App() {
   const [costs, setCosts] = useState([]);
+
   const allBuy = costs
     .filter(cost => cost.type === "هزینه")
     .reduce((sum, cost) => sum + Number(cost.price), 0);
@@ -19,7 +20,15 @@ function App() {
   const removeCost = (id) => {
     const constsFiltered = costs.filter(cost => cost.id !== id)
     setCosts(constsFiltered)
+    localStorage.setItem('todos', JSON.stringify(constsFiltered));
   }
+
+  useEffect(() => {
+    const localCost = localStorage.getItem('todos');
+    if (localCost) {
+      setCosts(JSON.parse(localCost));
+    }
+  }, [])
 
   return (
     <>
@@ -67,7 +76,7 @@ function App() {
           </div>
         </div>
 
-        <div className="add-transaction-recent-transactions w-full flex md:flex-nowrap flex-wrap gap-2.5 mt-8">
+        <div className="add-transaction-recent-transactions w-full h-[512px] flex md:flex-nowrap flex-wrap gap-2.5 mt-8">
           <AddCostForm
             costs={costs}
             setCosts={setCosts}

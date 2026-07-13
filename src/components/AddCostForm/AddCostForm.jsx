@@ -19,7 +19,16 @@ function AddCostForm({ costs, setCosts }) {
     ]
 
     const handleAddCost = () => {
-        setCosts([...costs, { id: crypto.randomUUID(), desc, price, type, category, date }]);
+        const newCost = {
+            id: crypto.randomUUID(),
+            desc,
+            price,
+            type,
+            category,
+            date
+        }
+        setCosts([...costs, newCost]);
+        localStorage.setItem('todos', JSON.stringify([...costs, newCost]))
     }
 
 
@@ -71,7 +80,7 @@ function AddCostForm({ costs, setCosts }) {
                             {typeCost.map(type =>
                                 <li
                                     key={type}
-                                    className={`h-10 flex items-center  rounded-lg p-1 
+                                    className={`h-10 flex items-center  rounded-lg p-1 cursor-pointer
                                         ${selectType === type ? 'bg-gray-200' : 'hover:bg-gray-200'}
                                         `}
                                     onClick={() => {
@@ -85,36 +94,41 @@ function AddCostForm({ costs, setCosts }) {
                         </ul>
                     }
                 </div>
-                <div className="input flex flex-col gap-2 relative">
-                    <label htmlFor="category" className='font-bold'>دسته بندی</label>
-                    <input
-                        id='category'
-                        readOnly
-                        className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
-                        value={category}
-                        onClick={() => {
-                            setOpenCategories(!openCategories);
-                            setOpenType(false);
-                        }}
-                    />
-                    {openCategories &&
-                        <ul className='border rounded-lg p-1 absolute bottom-12 bg-white w-full z-10'>
-                            {categories.map(category =>
-                                <li
-                                    key={category}
-                                    className={`h-10 flex items-center  rounded-lg p-1 
+                {type === 'هزینه'
+                    ?
+                    <div className="input flex flex-col gap-2 relative">
+                        <label htmlFor="category" className='font-bold'>دسته بندی</label>
+                        <input
+                            id='category'
+                            readOnly
+                            className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
+                            value={category}
+                            onClick={() => {
+                                setOpenCategories(!openCategories);
+                                setOpenType(false);
+                            }}
+                        />
+                        {openCategories &&
+                            <ul className='border rounded-lg p-1 absolute bottom-12 bg-white w-full z-10'>
+                                {categories.map(category =>
+                                    <li
+                                        key={category}
+                                        className={`h-10 flex items-center  rounded-lg p-1 cursor-pointer
                                         ${selectType === category ? 'bg-gray-200' : 'hover:bg-gray-200'}
                                         `}
-                                    onClick={() => {
-                                        setCategory(category);
-                                        setOpenCategories(false);
-                                    }}
-                                >
-                                    {category}
-                                </li>)}
-                        </ul>
-                    }
-                </div>
+                                        onClick={() => {
+                                            setCategory(category);
+                                            setOpenCategories(false);
+                                        }}
+                                    >
+                                        {category}
+                                    </li>)}
+                            </ul>
+                        }
+                    </div>
+                    :
+                    ''
+                }
                 <div className="input flex flex-col gap-2">
                     <label htmlFor="date" className='font-bold'>تاریخ</label>
                     <input
@@ -125,7 +139,7 @@ function AddCostForm({ costs, setCosts }) {
                         onChange={(e) => setDate(e.target.value)}
                     />
                 </div>
-                <button type='submit' className='bg-blue-600 text-white w-full h-10 rounded-lg mt-2'
+                <button type='submit' className='bg-blue-600 text-white w-full h-10 rounded-lg mt-2 cursor-pointer'
                 >افزودن</button>
             </form >
         </div >
