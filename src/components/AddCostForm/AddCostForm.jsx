@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import RecentTransactions from '../RecentTransactions/RecentTransactions';
 
-function AddCostForm({ costs, setCosts }) {
+function AddCostForm({ costs, setCosts, addCostsDB }) {
     const today = new Date().toISOString().split("T")[0];
     const [desc, setDesc] = useState('');
     const [price, setPrice] = useState('');
@@ -18,17 +18,26 @@ function AddCostForm({ costs, setCosts }) {
         'غذا', 'حمل و نقل', ' قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
     ]
 
+    const resetForm = () => {
+        setDesc('');
+        setPrice('');
+        setType('');
+        setCategory('');
+        setDate(today);
+        setOpenType(false);
+        setOpenCategories(false);
+        setSelectType('');
+    }
+
     const handleAddCost = () => {
         const newCost = {
-            id: crypto.randomUUID(),
             desc,
             price,
             type,
             category,
             date
         }
-        setCosts([...costs, newCost]);
-        localStorage.setItem('todos', JSON.stringify([...costs, newCost]))
+        addCostsDB(newCost);
     }
 
 
@@ -49,6 +58,7 @@ function AddCostForm({ costs, setCosts }) {
                         type="text"
                         id='description'
                         required
+                        value={desc}
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setDesc(e.target.value)}
                     />
@@ -59,6 +69,7 @@ function AddCostForm({ costs, setCosts }) {
                         type="number"
                         id='price'
                         required
+                        value={price}
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         onChange={(e) => setPrice(e.target.value)}
                     />
@@ -68,6 +79,7 @@ function AddCostForm({ costs, setCosts }) {
                     <input
                         id='type'
                         readOnly
+                        value={type}
                         className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
                         value={type}
                         onClick={() => {

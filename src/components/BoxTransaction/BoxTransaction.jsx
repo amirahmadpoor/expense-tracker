@@ -1,7 +1,7 @@
 import { Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import React from 'react'
 
-function BoxTransaction({ id, desc, price, type, category, date, removeCost }) {
+function BoxTransaction({ id, desc, price, type, category, date, removeCostsDB }) {
     return (
         <div className='box flex justify-between bg-gray-100 p-3 rounded-lg'>
             <div className="box__right flex items-center gap-2">
@@ -39,7 +39,7 @@ function BoxTransaction({ id, desc, price, type, category, date, removeCost }) {
                 </span>
                 <button className="box__trash text-red-600"
                     onClick={() => {
-                        removeCost(id)
+                        removeCostsDB(id)
                     }}
                 >
                     <Trash width={20} />

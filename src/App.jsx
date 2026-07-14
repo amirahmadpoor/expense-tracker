@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
 import { TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 
 function App() {
+  let db = useRef(null);
+  let objectStore = null;
+
   const [costs, setCosts] = useState([]);
 
   const allBuy = costs
@@ -17,17 +20,58 @@ function App() {
 
   const balance = allIncome - allBuy;
 
-  const removeCost = (id) => {
-    const constsFiltered = costs.filter(cost => cost.id !== id)
-    setCosts(constsFiltered)
-    localStorage.setItem('todos', JSON.stringify(constsFiltered));
+  const addCostsDB = (cost) => {
+    const transaction = db.current.transaction('costs', 'readwrite');
+    const store = transaction.objectStore('costs');
+    store.add(cost);
+
+    transaction.oncomplete = () => {
+      getAllCostsDB().onsuccess = (e) => {
+        setCosts(e.target.result);
+        resetForm();
+      }
+    };
+
+  }
+
+  const removeCostsDB = (id) => {
+    const transaction = db.current.transaction('costs', 'readwrite');
+    const store = transaction.objectStore('costs');
+    store.delete(id);
+
+    transaction.oncomplete = () => {
+      getAllCostsDB().onsuccess = (e) => {
+        setCosts(e.target.result);
+      };
+    };
+  };
+
+  const getAllCostsDB = () => {
+    const transaction = db.current.transaction('costs', 'readonly');
+    const store = transaction.objectStore('costs');
+    return store.getAll();
   }
 
   useEffect(() => {
-    const localCost = localStorage.getItem('todos');
-    if (localCost) {
-      setCosts(JSON.parse(localCost));
+    let indexDB = indexedDB.open('expense-tracker', 1);
+
+    indexDB.onupgradeneeded = (e) => {
+      db.current = e.target.result;
+      if (!db.objectStoreNames.contains('costs')) {
+        objectStore = db.current.createObjectStore('costs', {
+          keyPath: 'id',
+          autoIncrement: true,
+        })
+      }
     }
+
+    indexDB.onsuccess = (e) => {
+      db.current = e.target.result;
+      getAllCostsDB().onsuccess = (e) => {
+        setCosts(e.target.result);
+      }
+    }
+
   }, [])
 
   return (
@@ -80,11 +124,13 @@ function App() {
           <AddCostForm
             costs={costs}
             setCosts={setCosts}
+            addCostsDB={addCostsDB}
+            getAllCostsDB={getAllCostsDB}
           />
 
           <RecentTransactions
             costs={costs}
-            removeCost={removeCost}
+            removeCostsDB={removeCostsDB}
           />
         </div>
       </div>
