@@ -57,7 +57,7 @@ function App() {
 
     indexDB.onupgradeneeded = (e) => {
       db.current = e.target.result;
-      if (!db.objectStoreNames.contains('costs')) {
+      if (!db.current.objectStoreNames.contains('costs')) {
         objectStore = db.current.createObjectStore('costs', {
           keyPath: 'id',
           autoIncrement: true,
