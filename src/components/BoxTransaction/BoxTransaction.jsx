@@ -3,6 +3,7 @@ import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import Swal from 'sweetalert2'
 
 function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB, editingCost, setEditingCost }) {
+    console.log(new Date(date))
 
     return (
         <div className={`box flex justify-between items-center border-b p-3 border-border`}>
@@ -46,7 +47,6 @@ function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB
                 <button type="button" className="box__edit text-primary cursor-pointer"
                     onClick={() => {
                         setEditingCost({ id, title, amount, type, category, date });
-                        
                     }}
                 >
                     <Edit3 width={20} />

@@ -10,16 +10,16 @@ import moment from 'jalali-moment';
 function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editingCost, setEditingCost, editCostsDB }) {
 
     const DatePicker = DatePickerModule.default;
-    const today = moment(new Date(), 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
     const [title, setTitle] = useState('');
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
-    const [date, setDate] = useState(today);
+    const [date, setDate] = useState(new Date());
     const [openType, setOpenType] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
 
+    const isValid = title.trim() && amount.trim() && type.trim();
 
     const resetForm = () => {
         setTitle('');
@@ -40,6 +40,8 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
             category,
             date
         }
+        console.log(date);
+
         addCostsDB(newCost);
         resetForm();
     }
@@ -66,12 +68,13 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
             setCategory(editingCost.category);
             setDate(editingCost.date);
         }
-    }, [editingCost])
+    }, [editingCost]);
+
 
     return (
-        <div className="form md:col-span-1 bg-white w-full h-full rounded-sm pt-5 pb-5 pl-3 pr-3">
+        <div className="form md:max-h-[528px] md:col-span-1 bg-white w-full rounded-sm pt-5 pb-5 pl-3 pr-3">
             <header className="form__header">
-                <span className="form__title">افزودن تراکنش</span>
+                <span className="form__title font-bold">افزودن تراکنش</span>
             </header>
             <form id='form' className='flex flex-col gap-2 mt-8'
                 onSubmit={(e) => {
@@ -179,7 +182,10 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                     />
 
                 </div>
-                <button type='submit' className='bg-primary text-white w-full h-10 rounded-sm mt-2 cursor-pointer'
+                <button
+                    type='submit'
+                    disabled={!isValid}
+                    className={`btn-submit ${isValid ? 'bg-primary cursor-pointer' : 'bg-gray-300 cursor-not-allowed'} text-white w-full h-10 rounded-sm mt-2`}
                 >{!editingCost ? 'افزودن' : 'ویرایش'}</button>
             </form >
         </div >

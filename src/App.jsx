@@ -20,6 +20,7 @@ function App() {
   const categories = [
     'غذا', 'حمل و نقل', ' قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
   ]
+
   const allBuy = costs
     .filter(cost => cost.type === "هزینه")
     .reduce((sum, cost) => sum + Number(cost.amount), 0);
@@ -137,7 +138,7 @@ function App() {
   }, [])
 
   return (
-    <div className='container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 mr-auto ml-auto'>
+    <div className='container grid sm:grid-cols-2 md:grid-cols-4 gap-2 mx-auto'>
       <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
       <header className='col-span-full w-full h-30 bg-white flex items-center rounded-sm'>
         <div className="header-wrapper m-auto w-5xl flex items-center justify-between">
@@ -204,6 +205,8 @@ function App() {
         removeCostsDB={removeCostsDB}
         editingCost={editingCost}
         setEditingCost={setEditingCost}
+        typeCost={typeCost}
+        categories={categories}
       />
       {/* <FilterCosts /> */}
     </div>
