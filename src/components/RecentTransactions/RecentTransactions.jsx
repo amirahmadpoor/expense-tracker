@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
 import { Filter } from 'lucide-react'
-import FilterCosts from '../FilterCosts/FilterCosts'
+// import FilterCosts from '../FilterCosts/FilterCosts'
 
 function RecentTransactions({ costs, removeCostsDB, editingCost, setEditingCost }) {
 

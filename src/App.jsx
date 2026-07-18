@@ -3,7 +3,7 @@ import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
 import { icons, NotebookTabs, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
-import FilterCosts from './components/FilterCosts/FilterCosts'
+// import FilterCosts from './components/FilterCosts/FilterCosts'
 import toast from 'react-hot-toast'
 
 function App() {
@@ -205,7 +205,7 @@ function App() {
         editingCost={editingCost}
         setEditingCost={setEditingCost}
       />
-      <FilterCosts />
+      {/* <FilterCosts /> */}
     </div>
   )
 }
