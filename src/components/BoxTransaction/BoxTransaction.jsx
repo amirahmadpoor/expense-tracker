@@ -1,33 +1,35 @@
-import { Trash, TrendingDown, TrendingUp } from 'lucide-react'
-import React from 'react'
+// import { format } from 'date-fns-jalali';
+import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
+import Swal from 'sweetalert2'
 
-function BoxTransaction({ id, desc, price, type, category, date, removeCostsDB }) {
+function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB, editingCost, setEditingCost }) {
+
     return (
-        <div className='box flex justify-between bg-gray-100 p-3 rounded-lg'>
+        <div className={`box flex justify-between items-center border-b p-3 border-border`}>
             <div className="box__right flex items-center gap-2">
                 {type === 'هزینه'
                     ?
-                    <span className="box__type p-4 rounded-full bg-red-200 text-red-600">
+                    <span className="box__type p-4 rounded-full bg-danger-light text-danger">
                         <TrendingDown />
                     </span>
                     :
-                    <span className="box__type p-4 rounded-full bg-green-200 text-green-600">
+                    <span className="box__type p-4 rounded-full bg-success-light text-success">
                         <TrendingUp />
                     </span>
                 }
-                <div className="box__inf">
+                <div className="box__info w-[200px]">
                     <span className='font-bold'>
-                        {desc}
+                        {title}
                     </span>
                     <div className='text-gray-400 flex gap-2'>
-                        <span>{category}</span>
-                        -
-                        <span>{date}</span>
+                        {category && <span>{category} - </span>}
+                        <span>{new Date(date).toLocaleDateString("fa-IR")}</span>
                     </div>
                 </div>
             </div>
-            <div className="box__left flex items-center gap-2">
-                <span className={`box__price 
+
+            <div className="box__center">
+                <span className={`box__amount 
                     ${type === 'هزینه'
                         ?
                         'text-red-600'
@@ -35,16 +37,41 @@ function BoxTransaction({ id, desc, price, type, category, date, removeCostsDB }
                         'text-green-500'
                     }
                     `}>
-                    {Number(price).toLocaleString("fa-IR")} تومان
+                    {Number(amount).toLocaleString("fa-IR")} تومان
                 </span>
-                <button className="box__trash text-red-600"
+            </div>
+
+            <div className="box__left flex items-center gap-4">
+
+                <button type="button" className="box__edit text-primary cursor-pointer"
                     onClick={() => {
-                        removeCostsDB(id)
+                        setEditingCost({ id, title, amount, type, category, date });
+                        
+                    }}
+                >
+                    <Edit3 width={20} />
+                </button>
+
+                <button type="button" className="box__trash text-red-600 cursor-pointer"
+                    onClick={async () => {
+                        const res = await Swal.fire({
+                            title: 'حذف',
+                            text: 'آیا از حذف تراکنش اطمینان دارید؟',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'تایید',
+                            cancelButtonText: 'لغو'
+                        }
+                        )
+                        if (res.isConfirmed) {
+                            removeCostsDB(id);
+                        }
                     }}
                 >
                     <Trash width={20} />
                 </button>
             </div>
+
         </div>
     )
 }

@@ -1,26 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import RecentTransactions from '../RecentTransactions/RecentTransactions';
+import DatePickerModule from "react-multi-date-picker";
+import { Calendar } from "react-multi-date-picker"
+import persian from "react-date-object/calendars/persian"
+import persian_fa from "react-date-object/locales/persian_fa"
+import moment from 'jalali-moment';
 
-function AddCostForm({ costs, setCosts, addCostsDB }) {
-    const today = new Date().toISOString().split("T")[0];
-    const [desc, setDesc] = useState('');
-    const [price, setPrice] = useState('');
+
+function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editingCost, setEditingCost, editCostsDB }) {
+
+    const DatePicker = DatePickerModule.default;
+    const today = moment(new Date(), 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD');
+    const [title, setTitle] = useState('');
+    const [amount, setAmount] = useState('');
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
     const [date, setDate] = useState(today);
     const [openType, setOpenType] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
-    const typeCost = [
-        'هزینه', 'درآمد'
-    ]
-    const categories = [
-        'غذا', 'حمل و نقل', ' قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
-    ]
+
 
     const resetForm = () => {
-        setDesc('');
-        setPrice('');
+        setTitle('');
+        setAmount('');
         setType('');
         setCategory('');
         setDate(today);
@@ -31,47 +34,71 @@ function AddCostForm({ costs, setCosts, addCostsDB }) {
 
     const handleAddCost = () => {
         const newCost = {
-            desc,
-            price,
+            title,
+            amount,
             type,
             category,
             date
         }
         addCostsDB(newCost);
+        resetForm();
     }
 
+    const handleEditCost = () => {
+        const editCost = {
+            id: editingCost.id,
+            title,
+            amount,
+            type,
+            category,
+            date
+        }
+        editCostsDB(editCost);
+        resetForm();
+        setEditingCost(null);
+    }
+
+    useEffect(() => {
+        if (editingCost) {
+            setTitle(editingCost.title);
+            setAmount(editingCost.amount);
+            setType(editingCost.type);
+            setCategory(editingCost.category);
+            setDate(editingCost.date);
+        }
+    }, [editingCost])
 
     return (
-        <div className="form bg-white w-full h-full rounded-lg pt-5 pb-5 pl-3 pr-3">
+        <div className="form md:col-span-1 bg-white w-full h-full rounded-sm pt-5 pb-5 pl-3 pr-3">
             <header className="form__header">
                 <span className="form__title">افزودن تراکنش</span>
             </header>
-            <form id='form' className='flex flex-col gap-2'
+            <form id='form' className='flex flex-col gap-2 mt-8'
                 onSubmit={(e) => {
                     e.preventDefault();
-                    handleAddCost();
+                    !editingCost ? handleAddCost() : handleEditCost();
                 }}
             >
                 <div className="input flex flex-col gap-2">
-                    <label htmlFor="description" className='font-bold'>توضیحات</label>
+                    <label htmlFor="title" className='font-bold'>عنوان</label>
                     <input
                         type="text"
-                        id='description'
+                        id='title'
                         required
-                        value={desc}
-                        className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
-                        onChange={(e) => setDesc(e.target.value)}
+                        value={title}
+                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
+                        onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
                 <div className="input flex flex-col gap-2">
-                    <label htmlFor="price" className='font-bold'>مبلغ</label>
+                    <label htmlFor="amount" className='font-bold'>مبلغ</label>
                     <input
                         type="number"
-                        id='price'
+                        id='amount'
                         required
-                        value={price}
-                        className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
-                        onChange={(e) => setPrice(e.target.value)}
+                        value={amount}
+                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
+                        onChange={(e) => setAmount(e.target.value)}
                     />
                 </div>
                 <div className="input flex flex-col gap-2 relative">
@@ -80,20 +107,19 @@ function AddCostForm({ costs, setCosts, addCostsDB }) {
                         id='type'
                         readOnly
                         value={type}
-                        className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
-                        value={type}
+                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
                         onClick={() => {
                             setOpenType(!openType);
                             setOpenCategories(false);
                         }}
                     />
                     {openType &&
-                        <ul className='border rounded-lg p-1 absolute -bottom-25 bg-white w-full z-10'>
+                        <ul className='border rounded-sm p-1 absolute -bottom-25 bg-white w-full z-10'>
                             {typeCost.map(type =>
                                 <li
                                     key={type}
-                                    className={`h-10 flex items-center  rounded-lg p-1 cursor-pointer
-                                        ${selectType === type ? 'bg-gray-200' : 'hover:bg-gray-200'}
+                                    className={`h-10 flex items-center  rounded-sm p-1 cursor-pointer
+                                        ${selectType === type ? 'bg-gray-100' : 'hover:bg-gray-100'}
                                         `}
                                     onClick={() => {
                                         setType(type);
@@ -113,7 +139,7 @@ function AddCostForm({ costs, setCosts, addCostsDB }) {
                         <input
                             id='category'
                             readOnly
-                            className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
+                            className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
                             value={category}
                             onClick={() => {
                                 setOpenCategories(!openCategories);
@@ -121,12 +147,12 @@ function AddCostForm({ costs, setCosts, addCostsDB }) {
                             }}
                         />
                         {openCategories &&
-                            <ul className='border rounded-lg p-1 absolute bottom-12 bg-white w-full z-10'>
+                            <ul className='border rounded-sm p-1 absolute bottom-12 bg-white w-full z-10'>
                                 {categories.map(category =>
                                     <li
                                         key={category}
-                                        className={`h-10 flex items-center  rounded-lg p-1 cursor-pointer
-                                        ${selectType === category ? 'bg-gray-200' : 'hover:bg-gray-200'}
+                                        className={`h-10 flex items-center  rounded-sm p-1 cursor-pointer
+                                        ${selectType === category ? 'bg-gray-100' : 'hover:bg-gray-100'}
                                         `}
                                         onClick={() => {
                                             setCategory(category);
@@ -142,17 +168,19 @@ function AddCostForm({ costs, setCosts, addCostsDB }) {
                     ''
                 }
                 <div className="input flex flex-col gap-2">
-                    <label htmlFor="date" className='font-bold'>تاریخ</label>
-                    <input
-                        type="date"
-                        id='date'
+                    <label className='font-bold'>تاریخ</label>
+                    <DatePicker
+                        calendar={persian}
+                        locale={persian_fa}
                         value={date}
-                        className='h-10 bg-gray-200 rounded-lg p-2 outline-0 focus:border'
-                        onChange={(e) => setDate(e.target.value)}
+                        onChange={(value) => {
+                            setDate(value.toDate())
+                        }}
                     />
+
                 </div>
-                <button type='submit' className='bg-blue-600 text-white w-full h-10 rounded-lg mt-2 cursor-pointer'
-                >افزودن</button>
+                <button type='submit' className='bg-primary text-white w-full h-10 rounded-sm mt-2 cursor-pointer'
+                >{!editingCost ? 'افزودن' : 'ویرایش'}</button>
             </form >
         </div >
     )

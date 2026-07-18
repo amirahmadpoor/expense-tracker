@@ -11,3 +11,7 @@
     font-family: 'vazir-b';
     src: url(/fonts/vazirmatn/Vazirmatn-ExtraBold.ttf);
 } */
+
+body{
+    font-family: 'vazir-r';
+}
