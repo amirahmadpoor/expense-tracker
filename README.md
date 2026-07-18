@@ -40,7 +40,6 @@
 - react-hot-toast
 - sweetalert2
 - react-multi-date-picker
-- jalali-moment
 ## اجرای پروژه
 
 پیش‌نیاز: Node.js نسخه 18 یا بالاتر
