@@ -4,7 +4,6 @@ import DatePickerModule from "react-multi-date-picker";
 import { Calendar } from "react-multi-date-picker"
 import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
-import moment from 'jalali-moment';
 
 
 function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editingCost, setEditingCost, editCostsDB }) {
@@ -26,7 +25,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
         setAmount('');
         setType('');
         setCategory('');
-        setDate(today);
+        setDate(new Date());
         setOpenType(false);
         setOpenCategories(false);
         setSelectType('');
@@ -40,7 +39,6 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
             category,
             date
         }
-        console.log(date);
 
         addCostsDB(newCost);
         resetForm();

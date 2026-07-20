@@ -3,7 +3,6 @@ import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import Swal from 'sweetalert2'
 
 function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB, editingCost, setEditingCost }) {
-    console.log(new Date(date))
 
     return (
         <div className={`box flex justify-between items-center border-b p-3 border-border`}>
@@ -24,7 +23,7 @@ function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB
                     </span>
                     <div className='text-gray-400 flex gap-2'>
                         {category && <span>{category} - </span>}
-                        <span>{new Date(date).toLocaleDateString("fa-IR")}</span>
+                        <span>{date.toLocaleDateString("fa-IR")}</span>
                     </div>
                 </div>
             </div>

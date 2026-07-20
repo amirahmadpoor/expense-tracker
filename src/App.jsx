@@ -202,6 +202,7 @@ function App() {
 
       <RecentTransactions
         costs={costs}
+        setCosts={setCosts}
         removeCostsDB={removeCostsDB}
         editingCost={editingCost}
         setEditingCost={setEditingCost}
