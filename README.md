@@ -49,7 +49,7 @@ npm run dev
 پس از اجرا، پروژه در آدرس لوکال نمایش داده می‌شود (معمولا):
 
 ```text
-http://localhost:5173
+http://localhost:5173/expense-tracker/
 ```
 
 ## برنامه توسعه
