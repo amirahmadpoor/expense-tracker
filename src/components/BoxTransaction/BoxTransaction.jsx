@@ -2,12 +2,22 @@
 import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import Swal from 'sweetalert2'
 
-function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB, editingCost, setEditingCost }) {
+function BoxTransaction({ id, title, amount, type, category, date, categories, removeCostsDB, editingCost, setEditingCost }) {
+    const categoryLabel = {
+        food: 'غذا',
+        transport: 'حمل و نقل',
+        bill: 'قبض',
+        entertainment: 'سرگرمی',
+        shopping: 'خرید',
+        health: 'بهداشت',
+        education: 'آموزش',
+        other: 'سایر',
+    }[category];
 
     return (
         <div className={`box flex justify-between items-center border-b p-3 border-border`}>
             <div className="box__right flex items-center gap-2">
-                {type === 'هزینه'
+                {type === 'expense'
                     ?
                     <span className="box__type p-4 rounded-full bg-danger-light text-danger">
                         <TrendingDown />
@@ -22,7 +32,11 @@ function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB
                         {title}
                     </span>
                     <div className='text-gray-400 flex gap-2'>
-                        {category && <span>{category} - </span>}
+                        {categoryLabel && (
+                            <span>
+                                {categoryLabel} -
+                            </span>
+                        )}
                         <span>{date.toLocaleDateString("fa-IR")}</span>
                     </div>
                 </div>
@@ -30,7 +44,7 @@ function BoxTransaction({ id, title, amount, type, category, date, removeCostsDB
 
             <div className="box__center">
                 <span className={`box__amount 
-                    ${type === 'هزینه'
+                    ${type === 'expense'
                         ?
                         'text-red-600'
                         :

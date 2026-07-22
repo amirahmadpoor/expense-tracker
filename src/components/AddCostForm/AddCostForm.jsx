@@ -17,6 +17,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
     const [openType, setOpenType] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
+    const [selectCategory, setSelectCategory] = useState('');
 
     const isValid = title.trim() && amount.trim() && type.trim();
 
@@ -87,7 +88,8 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                         id='title'
                         required
                         value={title}
-                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
+                        className='h-10 border-field p-2 outline-0 focus:border'
+                        placeholder='عنوان تراکنش'
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
@@ -98,7 +100,8 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                         id='amount'
                         required
                         value={amount}
-                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
+                        className='h-10 border-field p-2 outline-0 focus:border'
+                        placeholder='مبلغ'
                         onChange={(e) => setAmount(e.target.value)}
                     />
                 </div>
@@ -107,60 +110,60 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                     <input
                         id='type'
                         readOnly
-                        value={type}
-                        className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
+                        value={typeCost.find(item => item.value === type)?.label || ''}
+                        className='h-10 border-field p-2 outline-0 focus:border'
+                        placeholder='انتخاب تراکنش'
                         onClick={() => {
                             setOpenType(!openType);
                             setOpenCategories(false);
                         }}
                     />
                     {openType &&
-                        <ul className='border rounded-sm p-1 absolute -bottom-25 bg-white w-full z-10'>
+                        <ul className='border-field p-1 absolute -bottom-25 bg-white w-full z-10'>
                             {typeCost.map(type =>
                                 <li
-                                    key={type}
-                                    className={`h-10 flex items-center  rounded-sm p-1 cursor-pointer
-                                        ${selectType === type ? 'bg-gray-100' : 'hover:bg-gray-100'}
-                                        `}
+                                    key={type.value}
+                                    className={`h-10 flex items-center rounded-sm p-1 cursor-pointer 
+                                        ${selectType === type.value && 'bg-gray-100'}`}
                                     onClick={() => {
-                                        setType(type);
+                                        setType(type.value);
                                         setOpenType(false);
-                                        setSelectType(type);
+                                        setSelectType(type.value);
                                     }}
                                 >
-                                    {type}
+                                    {type.label}
                                 </li>)}
                         </ul>
                     }
                 </div>
-                {type === 'هزینه'
+                {type === 'expense'
                     ?
                     <div className="input flex flex-col gap-2 relative">
                         <label htmlFor="category" className='font-bold'>دسته بندی</label>
                         <input
                             id='category'
                             readOnly
-                            className='h-10 bg-gray-100 rounded-sm p-2 outline-0 focus:border'
-                            value={category}
+                            className='h-10 border-field p-2 outline-0 focus:border'
+                            placeholder='انتخاب دسته'
+                            value={categories.find(item => item.value === category)?.label || ''}
                             onClick={() => {
                                 setOpenCategories(!openCategories);
                                 setOpenType(false);
                             }}
                         />
                         {openCategories &&
-                            <ul className='border rounded-sm p-1 absolute bottom-12 bg-white w-full z-10'>
+                            <ul className='border-field p-1 absolute bottom-12 bg-white w-full z-10'>
                                 {categories.map(category =>
                                     <li
-                                        key={category}
-                                        className={`h-10 flex items-center  rounded-sm p-1 cursor-pointer
-                                        ${selectType === category ? 'bg-gray-100' : 'hover:bg-gray-100'}
-                                        `}
+                                        key={category.value}
+                                        className={`h-10 flex items-center rounded-sm p-1 cursor-pointer
+                                            ${selectCategory === category.value && 'bg-gray-100'}`}
                                         onClick={() => {
-                                            setCategory(category);
+                                            setCategory(category.value);
                                             setOpenCategories(false);
                                         }}
                                     >
-                                        {category}
+                                        {category.label}
                                     </li>)}
                             </ul>
                         }

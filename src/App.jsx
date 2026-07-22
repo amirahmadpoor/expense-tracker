@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
-import { icons, NotebookTabs, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
-// import FilterCosts from './components/FilterCosts/FilterCosts'
+import { icons, LineChart, NotebookTabs, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Charts from './components/Charts/Charts'
+import BoxBudget from './components/BoxBudget/BoxBudget'
 
 function App() {
   const [modal, setModal] = useState(false);
@@ -14,19 +15,29 @@ function App() {
 
   const [costs, setCosts] = useState([]);
   const [editingCost, setEditingCost] = useState(null);
+
   const typeCost = [
-    'هزینه', 'درآمد'
-  ]
+    { value: 'expense', label: 'هزینه' },
+    { value: 'income', label: 'درآمد' },
+  ];
+
   const categories = [
-    'غذا', 'حمل و نقل', ' قبض', 'سرگرمی', 'خرید', 'بهداشت', 'آموزش', 'سایر'
-  ]
+    { value: 'food', label: 'غذا' },
+    { value: 'transport', label: 'حمل و نقل' },
+    { value: 'bill', label: 'قبض' },
+    { value: 'entertainment', label: 'سرگرمی' },
+    { value: 'shopping', label: 'خرید' },
+    { value: 'health', label: 'بهداشت' },
+    { value: 'education', label: 'آموزش' },
+    { value: 'other', label: 'سایر' },
+  ];
 
   const allBuy = costs
-    .filter(cost => cost.type === "هزینه")
+    .filter(cost => cost.type === 'expense')
     .reduce((sum, cost) => sum + Number(cost.amount), 0);
 
   const allIncome = costs
-    .filter(cost => cost.type === "درآمد")
+    .filter(cost => cost.type === 'income')
     .reduce((sum, cost) => sum + Number(cost.amount), 0);
 
   const balance = allIncome - allBuy;
@@ -209,6 +220,14 @@ function App() {
         typeCost={typeCost}
         categories={categories}
       />
+
+      <BoxBudget />
+
+      <Charts
+        costs={costs}
+      />
+
+
       {/* <FilterCosts /> */}
     </div>
   )

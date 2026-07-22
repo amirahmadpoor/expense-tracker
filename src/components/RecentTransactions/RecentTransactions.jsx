@@ -1,165 +1,227 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
-import { Filter } from 'lucide-react'
-// import FilterCosts from '../FilterCosts/FilterCosts'
 
-function RecentTransactions({ costs, removeCostsDB, editingCost, setEditingCost, typeCost, categories }) {
-    const [typeField, setTypeField] = useState('همه');
-    const [categoryField, setCategoryField] = useState('همه');
-    const [dateField, setDateField] = useState('همه');
-    const [sortField, setSortField] = useState('جدیدترین');
+function RecentTransactions({
+    costs,
+    removeCostsDB,
+    editingCost,
+    setEditingCost,
+    typeCost,
+    categories
+}) {
 
-    let costsFiltered;
+    const FILTER_ALL = 'all';
+    const [typeField, setTypeField] = useState(FILTER_ALL);
+    const [categoryField, setCategoryField] = useState(FILTER_ALL);
+    const [sortField, setSortField] = useState('newest');
 
+    const [showType, setShowType] = useState(false);
+    const [showCategory, setShowCategory] = useState(false);
+    const [showSort, setShowSort] = useState(false);
 
-    const sorts = ['جدیدترین', 'قدیمی‌ترین', 'بیشترین مبلغ', 'کمترین مبلغ']
+    const sorts = [
+        { value: 'newest', label: 'جدیدترین' },
+        { value: 'oldest', label: 'قدیمی‌ترین' },
+        { value: 'highest', label: 'بیشترین مبلغ' },
+        { value: 'lowest', label: 'کمترین مبلغ' },
+    ];
+
+    const closeAll = () => {
+        setShowType(false);
+        setShowCategory(false);
+        setShowSort(false);
+    };
 
     const toggleTypeField = () => {
-        document.querySelector('.select-type').classList.toggle('hidden');
-    }
+        setShowType(prev => !prev);
+        setShowCategory(false);
+        setShowSort(false);
+    };
 
     const toggleCategoryField = () => {
-        document.querySelector('.select-category').classList.toggle('hidden');
-    }
+        setShowCategory(prev => !prev);
+        setShowType(false);
+        setShowSort(false);
+    };
 
     const toggleSortField = () => {
-        document.querySelector('.select-sorting').classList.toggle('hidden');
-    }
+        setShowSort(prev => !prev);
+        setShowType(false);
+        setShowCategory(false);
+    };
 
-    costsFiltered = costs
-        .filter(cost => typeField === 'همه' || cost.type === typeField)
-        .filter(cost => categoryField === 'همه' || cost.category === categoryField)
+    let costsFiltered = costs
+        .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
+        .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
 
-    // console.log(costsFiltered[0].date);
     switch (sortField) {
-        case 'بیشترین مبلغ':
-            costsFiltered = costsFiltered.sort((a, b) => Number(b.amount) - Number(a.amount));
-            break;
-        case 'کمترین مبلغ':
-            costsFiltered = costsFiltered.sort((a, b) => Number(a.amount) - Number(b.amount));
+        case 'highest':
+            costsFiltered.sort((a, b) => Number(b.amount) - Number(a.amount));
             break;
 
-        case 'جدیدترین':
-            costsFiltered = costsFiltered.sort((a, b) => b.date - a.date);
+        case 'lowest':
+            costsFiltered.sort((a, b) => Number(a.amount) - Number(b.amount));
             break;
-        case 'قدیمی‌ترین':
-            costsFiltered = costsFiltered.sort((a, b) => a.date - b.date);
+
+        case 'oldest':
+            costsFiltered.sort((a, b) => a.date - b.date);
+            break;
+
+        case 'newest':
+        default:
+            costsFiltered.sort((a, b) => b.date - a.date);
             break;
     }
-
 
     return (
         <div className='recent-transactions md:col-start-2 md:col-span-3 md:min-h-[528px] bg-white w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
+
             <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-gray-300 text-sm">
-                <div className="recent-transactions__search bg-gray-100 rounded-sm border p-1">
-                    <input type="text"
+
+                <div className="recent-transactions__search bg-gray-100 rounded-sm border-field p-1">
+                    <input
+                        type="text"
                         className='outline-none'
-                        placeholder='جستجو' />
+                        placeholder='جستجو'
+                    />
                 </div>
-                <div className="recent-transactions__type max-w-[150px] w-full bg-gray-100 rounded-sm border p-1 relative">
-                    <div className='outline-none cursor-pointer'
+
+                <div className="recent-transactions__type max-w-[150px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+
+                    <div
+                        className='cursor-pointer'
                         onClick={toggleTypeField}
                     >
-                        {typeField}
+                        {typeField === FILTER_ALL
+                            ? 'همه تراکنش‌ها'
+                            : typeCost.find(item => item.value === typeField)?.label}
                     </div>
-                    <ul className='select-type w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 hidden'>
-                        <p
+
+                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showType ? '' : 'hidden'}`}>
+
+                        <li
                             className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
                             onClick={() => {
-                                setTypeField('همه')
-                                toggleTypeField();
+                                setTypeField('all');
+                                closeAll();
                             }}
                         >
-                            همه</p>
+                            همه تراکنش‌ها
+                        </li>
 
                         {typeCost.map((type, index) => (
                             <li
                                 key={index}
-                                className='cursor-pointer w-full hover:bg-gray-100 rounded-sm p-1'
+                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
                                 onClick={() => {
-                                    setTypeField(type);
-                                    toggleTypeField();
+                                    setTypeField(type.value);
+                                    type.value === 'income' && setCategoryField(FILTER_ALL);
+                                    closeAll();
                                 }}
                             >
-                                {type}
+                                {type.label}
                             </li>
                         ))}
+
                     </ul>
+
                 </div>
 
-                <div className="recent-transactions__category max-w-[200px] w-full bg-gray-100 rounded-sm border p-1 relative">
-                    <div className='outline-none cursor-pointer'
+                <div className="recent-transactions__category max-w-[200px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+
+                    <div
+                        className='cursor-pointer'
                         onClick={toggleCategoryField}
                     >
-                        {categoryField}
+                        {categoryField === FILTER_ALL
+                            ? 'همه دسته‌ها'
+                            : categories.find(item => item.value === categoryField)?.label}
                     </div>
-                    <ul className='select-category w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 hidden'>
-                        <p
+
+                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showCategory ? '' : 'hidden'}`}>
+
+                        <li
                             className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
                             onClick={() => {
-                                setCategoryField('همه');
-                                toggleCategoryField();
+                                setCategoryField('all');
+                                closeAll();
                             }}
                         >
-                            همه</p>
+                            همه دسته‌ها
+                        </li>
 
                         {categories.map((category, index) => (
                             <li
                                 key={index}
-                                className='cursor-pointer w-full hover:bg-gray-100 rounded-sm p-1'
+                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
                                 onClick={() => {
-                                    setCategoryField(category);
-                                    toggleCategoryField();
+                                    setCategoryField(category.value);
+                                    closeAll();
                                 }}
                             >
-                                {category}
+                                {category.label}
                             </li>
                         ))}
+
                     </ul>
+
                 </div>
-                <div className="recent-transactions__sorting max-w-[100px] w-full bg-gray-100 rounded-sm border p-1 cursor-pointer relative">
-                    <div type="text"
+
+                <div className="recent-transactions__sorting max-w-[120px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+
+                    <div
+                        className='cursor-pointer'
                         onClick={toggleSortField}
                     >
-                        {sortField}
+                        {sorts.find(sort => sort.value === sortField)?.label}
                     </div>
-                    <ul className='select-sorting w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 hidden'>
-                        {sorts.map((sort, index) => (
+
+                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showSort ? '' : 'hidden'}`}>
+
+                        {sorts.map(sort => (
                             <li
-                                key={index}
-                                className='cursor-pointer w-full hover:bg-gray-100 rounded-sm p-1'
+                                key={sort.value}
+                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
                                 onClick={() => {
-                                    setSortField(sort);
-                                    toggleSortField();
+                                    setSortField(sort.value);
+                                    closeAll();
                                 }}
                             >
-                                {sort}
+                                {sort.label}
                             </li>
                         ))}
+
                     </ul>
+
                 </div>
+
             </header>
 
-
             <div className='recent-transactions__transactions flex flex-col gap-2 mt-5 h-[400px] overflow-y-auto'>
-                <span className='font-bold'>تراکنش‌های اخیر</span>
+
+                <span className='font-bold'>
+                    تراکنش‌های اخیر
+                </span>
+
                 {costsFiltered.length > 0
-                    ?
-                    costsFiltered.map(cost =>
+                    ? costsFiltered.map(cost => (
                         <BoxTransaction
                             key={cost.id}
                             {...cost}
+                            categories={categories}
                             removeCostsDB={removeCostsDB}
                             editingCost={editingCost}
                             setEditingCost={setEditingCost}
-                        />)
-                    :
-                    <NotTransaction />
+                        />
+                    ))
+                    : <NotTransaction />
                 }
+
             </div>
+
         </div>
-    )
+    );
 }
 
-export default RecentTransactions
+export default RecentTransactions;
