@@ -5,7 +5,7 @@ import RecentTransactions from './components/RecentTransactions/RecentTransactio
 import { icons, LineChart, NotebookTabs, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Charts from './components/Charts/Charts'
-// import BoxBudget from './components/BoxBudget/BoxBudget'
+import BoxBudget from './components/BoxBudget/BoxBudget'
 
 function App() {
   const [modal, setModal] = useState(false);
