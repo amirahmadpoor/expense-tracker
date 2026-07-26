@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
 
@@ -12,6 +12,7 @@ function RecentTransactions({
 }) {
 
     const FILTER_ALL = 'all';
+    const [search, setSearch] = useState('');
     const [typeField, setTypeField] = useState(FILTER_ALL);
     const [categoryField, setCategoryField] = useState(FILTER_ALL);
     const [sortField, setSortField] = useState('newest');
@@ -26,6 +27,7 @@ function RecentTransactions({
         { value: 'highest', label: 'بیشترین مبلغ' },
         { value: 'lowest', label: 'کمترین مبلغ' },
     ];
+
 
     const closeAll = () => {
         setShowType(false);
@@ -51,7 +53,9 @@ function RecentTransactions({
         setShowCategory(false);
     };
 
+
     let costsFiltered = costs
+        .filter(cost => cost.title.includes(search))
         .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
         .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
 
@@ -85,6 +89,7 @@ function RecentTransactions({
                         className='outline-none'
                         placeholder='جستجو'
                         onFocus={closeAll}
+                        onChange={(e) => { setSearch(e.target.value) }}
                     />
                 </div>
 

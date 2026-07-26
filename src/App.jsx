@@ -32,18 +32,10 @@ function App() {
     { value: 'other', label: 'سایر' },
   ];
 
-  const allBuy = costs
-    .filter(cost => cost.type === 'expense')
-    .reduce((sum, cost) => sum + Number(cost.amount), 0);
-
-  const allIncome = costs
-    .filter(cost => cost.type === 'income')
-    .reduce((sum, cost) => sum + Number(cost.amount), 0);
-
-  const balance = allIncome - allBuy;
 
   const getAllCostsDB = () => {
     return new Promise((resolve, reject) => {
+
       const transaction = db.current.transaction('costs', 'readonly');
       const store = transaction.objectStore('costs');
 
@@ -59,6 +51,20 @@ function App() {
 
     })
   }
+
+  const allBuy =
+    costs
+      .filter(cost => cost.type === 'expense')
+      .reduce((sum, cost) => sum + Number(cost.amount), 0);
+
+  const allIncome =
+    costs
+      .filter(cost => cost.type === 'income')
+      .reduce((sum, cost) => sum + Number(cost.amount), 0);
+
+
+  const balance = allIncome - allBuy;
+
 
   const showSuccessToast = (text) => {
     toast.success(text);
@@ -202,7 +208,7 @@ function App() {
           <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
             <div className="box__title-price flex flex-col">
               <span className='box__title'>موجودی</span>
-              <span className='box__price text-primary'>{Number(allIncome - allBuy).toLocaleString('fa-IR')} تومان</span>
+              <span className='box__price text-primary'>{Number(balance).toLocaleString('fa-IR')} تومان</span>
             </div>
             <div className='box__icon p-4 rounded-full bg-primary-light text-primary'><WalletMinimal /></div>
           </div>
@@ -234,7 +240,6 @@ function App() {
         <div className="main-left w-full col-span-1 col-span-3 flex flex-col gap-2">
           <RecentTransactions
             costs={costs}
-            setCosts={setCosts}
             removeCostsDB={removeCostsDB}
             editingCost={editingCost}
             setEditingCost={setEditingCost}

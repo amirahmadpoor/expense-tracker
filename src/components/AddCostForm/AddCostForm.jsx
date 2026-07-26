@@ -71,7 +71,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
 
 
     return (
-        <div className="form card md:max-h-[460px] md:col-span-1 bg-surface w-full rounded-sm pt-5 pb-5 pl-3 pr-3">
+        <div className="form card md:max-h-[550px] md:col-span-1 bg-surface w-full rounded-sm pt-5 pb-5 pl-3 pr-3">
             <header className="form__header">
                 <span className="form__title font-bold">افزودن تراکنش</span>
             </header>
