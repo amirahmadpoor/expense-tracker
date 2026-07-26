@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
-import { icons, LineChart, NotebookTabs, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
+import { icons, LineChart, NotebookTabs, SunMoon, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Charts from './components/Charts/Charts'
 import BoxBudget from './components/BoxBudget/BoxBudget'
@@ -116,10 +116,24 @@ function App() {
     }
   };
 
+  const toggleDarkMode = () => {
+    const theme = localStorage.getItem('theme');
+    if (!theme) {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.add('light');
+    }
+    if (theme === 'light') {
+      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add('dark');
+    } else if (theme === 'dark') {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('dark');
+    }
+  }
+
 
   useEffect(() => {
     let indexDB = indexedDB.open('expense-tracker', 1);
-
     indexDB.onupgradeneeded = (e) => {
       db.current = e.target.result;
       if (!db.current.objectStoreNames.contains('costs')) {
@@ -136,90 +150,108 @@ function App() {
       setCosts(costs)
     }
 
+  }, []);
+
+  useEffect(() => {
+    toggleDarkMode();
   }, [])
 
   return (
-    <div className='container grid sm:grid-cols-2 md:grid-cols-4 gap-2 mx-auto'>
-      <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
-      <header className='col-span-full w-full h-30 bg-white flex items-center rounded-sm'>
-        <div className="header-wrapper m-auto w-5xl flex items-center justify-between">
-          <div className="brand flex gap-2 items-center">
+    <>
+      <header className='header col-span-full w-full h-20 bg-surface flex items-center rounded-sm'>
+        <div className="header-wrapper container w-full m-auto w-5xl flex items-center justify-between">
+          <div className="header__right flex gap-2 items-center">
             <span>
               <img src="/expense-tracker/logo.png" alt="" width={50} />
             </span>
             <h2 className='font-bold text-2xl'>مدیریت هزینه</h2>
           </div>
-          <div className='flex items-center gap-2.5'>
-            <span><User /></span>
-            <span className='w-20 h-8 flex items-center justify-center rounded-lg bg-gray-200'>کاربر</span>
+          <div className='header__left flex items-center gap-2.5'>
+            <span className='btn-header bg-surface'
+              onClick={toggleDarkMode}
+            >
+              <SunMoon />
+            </span>
+            <span className='btn-header bg-surface'>
+              <User />
+            </span>
           </div>
         </div>
       </header>
 
-      <div className="statistics w-full min-h-[30] col-span-4 flex items-center flex-wrap md:flex-nowrap gap-2">
-        <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-sm p-4">
-          <div className="box__title-price flex flex-col">
-            <span className='box__title'>کل در آمد</span>
-            <span className='box__price text-success'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
+      <div className='container grid sm:grid-cols-2 md:grid-cols-4 gap-2 mx-auto mt-2'>
+        <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
+
+        <div className="statistics w-full min-h-[30] col-span-4 flex items-center flex-wrap md:flex-nowrap gap-2">
+          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+            <div className="box__title-price flex flex-col">
+              <span className='box__title'>کل در آمد</span>
+              <span className='box__price text-success'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
+            </div>
+            <div className='box__icon p-4 rounded-full text-success bg-success-light'><TrendingUp /></div>
           </div>
-          <div className='box__icon p-4 rounded-full text-success bg-success-light'><TrendingUp /></div>
+
+          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+            <div className="box__title-price flex flex-col">
+              <span className='box__title'>کل هزینه</span>
+              <span className='box__price text-danger'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
+            </div>
+            <div className='box__icon p-4 rounded-full text-danger bg-danger-light'><TrendingDown /></div>
+          </div>
+
+          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+            <div className="box__title-price flex flex-col">
+              <span className='box__title'>موجودی</span>
+              <span className='box__price text-primary'>{Number(allIncome - allBuy).toLocaleString('fa-IR')} تومان</span>
+            </div>
+            <div className='box__icon p-4 rounded-full bg-primary-light text-primary'><WalletMinimal /></div>
+          </div>
+          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+            <div className="box__title-price flex flex-col">
+              <span className='box__title'>تراکنش‌ها</span>
+              <span className='box__price text-purple'>{costs.length.toLocaleString('fa-IR')}</span>
+            </div>
+            <div className='box__icon p-4 rounded-full bg-purple-light text-purple'><NotebookTabs /></div>
+          </div>
         </div>
 
-        <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-sm p-4">
-          <div className="box__title-price flex flex-col">
-            <span className='box__title'>کل هزینه</span>
-            <span className='box__price text-danger'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
-          </div>
-          <div className='box__icon p-4 rounded-full text-danger bg-danger-light'><TrendingDown /></div>
+        <div className="main-right flex flex-col gap-2">
+          <AddCostForm
+            typeCost={typeCost}
+            categories={categories}
+            costs={costs}
+            setCosts={setCosts}
+            addCostsDB={addCostsDB}
+            getAllCostsDB={getAllCostsDB}
+            editingCost={editingCost}
+            editCostsDB={editCostsDB}
+            setEditingCost={setEditingCost}
+          />
+
+          <BoxBudget />
         </div>
 
-        <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-sm p-4">
-          <div className="box__title-price flex flex-col">
-            <span className='box__title'>موجودی</span>
-            <span className='box__price text-primary'>{Number(allIncome - allBuy).toLocaleString('fa-IR')} تومان</span>
-          </div>
-          <div className='box__icon p-4 rounded-full bg-primary-light text-primary'><WalletMinimal /></div>
+        <div className="main-left w-full col-span-1 col-span-3 flex flex-col gap-2">
+          <RecentTransactions
+            costs={costs}
+            setCosts={setCosts}
+            removeCostsDB={removeCostsDB}
+            editingCost={editingCost}
+            setEditingCost={setEditingCost}
+            typeCost={typeCost}
+            categories={categories}
+          />
+
+
+          <Charts
+            costs={costs}
+          />
         </div>
-        <div className="box w-full min-w-[230px] h-full bg-white flex items-center justify-between rounded-sm p-4">
-          <div className="box__title-price flex flex-col">
-            <span className='box__title'>تراکنش‌ها</span>
-            <span className='box__price text-purple'>{costs.length.toLocaleString('fa-IR')}</span>
-          </div>
-          <div className='box__icon p-4 rounded-full bg-purple-light text-purple'><NotebookTabs /></div>
-        </div>
+
+
+        {/* <FilterCosts /> */}
       </div>
-
-      <AddCostForm
-        typeCost={typeCost}
-        categories={categories}
-        costs={costs}
-        setCosts={setCosts}
-        addCostsDB={addCostsDB}
-        getAllCostsDB={getAllCostsDB}
-        editingCost={editingCost}
-        editCostsDB={editCostsDB}
-        setEditingCost={setEditingCost}
-      />
-
-      <RecentTransactions
-        costs={costs}
-        setCosts={setCosts}
-        removeCostsDB={removeCostsDB}
-        editingCost={editingCost}
-        setEditingCost={setEditingCost}
-        typeCost={typeCost}
-        categories={categories}
-      />
-
-      <BoxBudget />
-
-      <Charts
-        costs={costs}
-      />
-
-
-      {/* <FilterCosts /> */}
-    </div>
+    </>
   )
 }
 

@@ -1,66 +1,192 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-    --color-primary: #2563eb;
-    --color-primary-light: #dbeafe;
-    --color-success: #16a34a;
-    --color-success-light: #dcfce7;
-    --color-danger: #dc2626;
-    --color-purple: #7c3aed;
-    --color-purple-light: #ede9fe;
-    --color-danger-light: #fee2e2;
-    --color-warning: #f59e0b;
-    --color-warning-light: #fef3c7;
-    --color-background: #f8fafc;
-    --color-surface: #ffffff;
-    --color-border: #e5e7eb;
-    --color-text-primary: #111827;
-    --color-text-secondary: #6b7280;
+    /* Colors */
+    --color-primary: var(--primary);
+    --color-primary-light: var(--primary-light);
 
-    --radius-sm: 0.5rem;
-    /* 8px */
-    --radius-md: 0.75rem;
-    /* 12px */
+    --color-success: var(--success);
+    --color-success-light: var(--success-light);
+
+    --color-danger: var(--danger);
+    --color-danger-light: var(--danger-light);
+
+    --color-purple: var(--purple);
+    --color-purple-light: var(--purple-light);
+
+    --color-warning: var(--warning);
+    --color-warning-light: var(--warning-light);
+
+    --color-background: var(--background);
+    --color-surface: var(--surface);
+    --color-surface-2: var(--surface-2);
+    --color-surface-3: var(--surface-3);
+
+    --color-border: var(--border);
+
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+
+    /* Radius */
+    --radius-sm: .5rem;
+    --radius-md: .75rem;
     --radius-lg: 1rem;
-    /* 16px */
     --radius-card: 1.25rem;
-    /* 20px */
 
+    /* Shadows */
+    --shadow-card: var(--shadow-card);
+    --shadow-modal: var(--shadow-modal);
+    --shadow-header-btn: var(--shadow-header-btn);
+
+    /* Font Size */
+    --text-heading: 2rem;
+    --text-title: 1.5rem;
+    --text-section: 1.25rem;
+    --text-body: 1rem;
+    --text-caption: .875rem;
+    --text-small: .75rem;
+
+    /* Spacing */
+    --spacing-1: .25rem;
+    --spacing-2: .5rem;
+    --spacing-4: 1rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+}
+
+/* ===========================
+   Light Theme
+=========================== */
+
+:root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+
+    --success: #16a34a;
+    --success-light: #dcfce7;
+
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+
+    --background: #f8fafc;
+
+    --surface: #ffffff;
+    /* bg-white */
+    --surface-2: #f9fafb;
+    /* bg-gray-50 */
+    --surface-3: #f3f4f6;
+    /* bg-gray-100 */
+
+    --border: #e5e7eb;
+
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
 
     --shadow-card: 0 2px 10px rgb(15 23 42 / 0.05);
     --shadow-modal: 0 20px 40px rgb(15 23 42 / 0.18);
+    --shadow-header-btn:
+        0 2px 8px rgb(124 58 237 / 0.12),
+        0 0 16px rgb(124 58 237 / 0.08);
+}
 
 
-    --text-heading: 2rem;
-    /* 32px */
-    --text-title: 1.5rem;
-    /* 24px */
-    --text-section: 1.25rem;
-    /* 20px */
-    --text-body: 1rem;
-    /* 16px */
-    --text-caption: 0.875rem;
-    /* 14px */
-    --text-small: 0.75rem;
-    /* 12px */
+.dark {
+    --primary: #3b82f6;
+    --primary-light: #1e3a8a;
 
-    --spacing-1: 0.25rem;
-    /* 4px */
-    --spacing-2: 0.5rem;
-    /* 8px */
-    --spacing-4: 1rem;
-    /* 16px */
-    --spacing-6: 1.5rem;
-    /* 24px */
-    --spacing-8: 2rem;
-    /* 32px */
-    --spacing-12: 3rem;
-    /* 48px */
-    --spacing-16: 4rem;
-    /* 64px */
+    --success: #22c55e;
+    --success-light: #14532d;
+
+    --danger: #ef4444;
+    --danger-light: #7f1d1d;
+
+    --purple: #a855f7;
+    --purple-light: #4c1d95;
+
+    --warning: #fbbf24;
+    --warning-light: #78350f;
+
+    /* Backgrounds */
+    --background: #1f2937;
+    /* bg صفحه */
+    --surface: #111827;
+    /* کارت‌ها */
+    --surface-2: #1f2937;
+    /* هاور */
+    --surface-3: #374151;
+    /* ورودی‌ها */
+
+    /* Border */
+    --border: #374151;
+
+    /* Text */
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+
+    /* Shadows */
+    --shadow-card:
+        0 1px 2px rgb(0 0 0 / .35),
+        0 8px 24px rgb(0 0 0 / .25);
+
+    --shadow-modal:
+        0 25px 50px rgb(0 0 0 / .55);
+
+    --shadow-header-btn:
+        0 0 8px rgb(168 85 247 / .35),
+        0 0 18px rgb(168 85 247 / .25),
+        0 8px 20px rgb(0 0 0 / .35);
+}
+
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
 }
 
 .border-field {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+}
+
+.btn-header {
+    padding: .5rem;
+    border-radius: .75rem;
+    cursor: pointer;
+
+    background: var(--surface);
+    color: var(--text-primary);
+
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-header-btn);
+
+    transition: all .2s;
+}
+
+.btn-header:hover {
+    border-color: rgb(168 85 247 / .45);
+
+    box-shadow:
+        0 2px 6px rgb(0 0 0 / .35),
+        0 0 18px rgba(169, 85, 247, 0.178),
+        0 0 36px rgba(169, 85, 247, 0.11);
+}
+
+.custom-date-picker {
+    max-width: 226px;
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
 }

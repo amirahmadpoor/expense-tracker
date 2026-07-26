@@ -71,7 +71,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
 
 
     return (
-        <div className="form md:max-h-[528px] md:col-span-1 bg-white w-full rounded-sm pt-5 pb-5 pl-3 pr-3">
+        <div className="form card md:max-h-[460px] md:col-span-1 bg-surface w-full rounded-sm pt-5 pb-5 pl-3 pr-3">
             <header className="form__header">
                 <span className="form__title font-bold">افزودن تراکنش</span>
             </header>
@@ -119,12 +119,12 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                         }}
                     />
                     {openType &&
-                        <ul className='border-field p-1 absolute -bottom-25 bg-white w-full z-10'>
+                        <ul className='border-field p-1 absolute -bottom-25 bg-surface w-full z-10'>
                             {typeCost.map(type =>
                                 <li
                                     key={type.value}
                                     className={`h-10 flex items-center rounded-sm p-1 cursor-pointer 
-                                        ${selectType === type.value && 'bg-gray-100'}`}
+                                        ${selectType === type.value && 'bg-surface-3'}`}
                                     onClick={() => {
                                         setType(type.value);
                                         setOpenType(false);
@@ -152,12 +152,12 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                             }}
                         />
                         {openCategories &&
-                            <ul className='border-field p-1 absolute bottom-12 bg-white w-full z-10'>
+                            <ul className='border-field p-1 absolute bottom-12 bg-surface w-full z-10'>
                                 {categories.map(category =>
                                     <li
                                         key={category.value}
                                         className={`h-10 flex items-center rounded-sm p-1 cursor-pointer
-                                            ${selectCategory === category.value && 'bg-gray-100'}`}
+                                            ${selectCategory === category.value && 'bg-surface-3'}`}
                                         onClick={() => {
                                             setCategory(category.value);
                                             setOpenCategories(false);
@@ -174,6 +174,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                 <div className="input flex flex-col gap-2">
                     <label className='font-bold'>تاریخ</label>
                     <DatePicker
+                        inputClass='custom-date-picker'
                         calendar={persian}
                         locale={persian_fa}
                         value={date}
@@ -186,7 +187,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                 <button
                     type='submit'
                     disabled={!isValid}
-                    className={`btn-submit ${isValid ? 'bg-primary cursor-pointer' : 'bg-gray-300 cursor-not-allowed'} text-white w-full h-10 rounded-sm mt-2`}
+                    className={`btn-submit ${isValid ? 'bg-primary cursor-pointer' : 'bg-surface-3 cursor-not-allowed'} text-white w-full h-10 rounded-sm mt-2`}
                 >{!editingCost ? 'افزودن' : 'ویرایش'}</button>
             </form >
         </div >

@@ -75,19 +75,20 @@ function RecentTransactions({
     }
 
     return (
-        <div className='recent-transactions md:col-start-2 md:col-span-3 md:min-h-[528px] bg-white w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
+        <div className='recent-transactions card md:col-start-2 md:col-span-3 md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
 
-            <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-gray-300 text-sm">
+            <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-border text-sm">
 
-                <div className="recent-transactions__search bg-gray-100 rounded-sm border-field p-1">
+                <div className="recent-transactions__search bg-surface-3 rounded-sm border-field p-1">
                     <input
                         type="text"
                         className='outline-none'
                         placeholder='جستجو'
+                        onFocus={closeAll}
                     />
                 </div>
 
-                <div className="recent-transactions__type max-w-[150px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+                <div className="recent-transactions__type max-w-[150px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
 
                     <div
                         className='cursor-pointer'
@@ -98,10 +99,10 @@ function RecentTransactions({
                             : typeCost.find(item => item.value === typeField)?.label}
                     </div>
 
-                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showType ? '' : 'hidden'}`}>
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showType ? '' : 'hidden'}`}>
 
                         <li
-                            className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
+                            className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
                                 setTypeField('all');
                                 closeAll();
@@ -113,7 +114,7 @@ function RecentTransactions({
                         {typeCost.map((type, index) => (
                             <li
                                 key={index}
-                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
+                                className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                                 onClick={() => {
                                     setTypeField(type.value);
                                     type.value === 'income' && setCategoryField(FILTER_ALL);
@@ -128,7 +129,7 @@ function RecentTransactions({
 
                 </div>
 
-                <div className="recent-transactions__category max-w-[200px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+                <div className="recent-transactions__category max-w-[200px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
 
                     <div
                         className='cursor-pointer'
@@ -139,10 +140,10 @@ function RecentTransactions({
                             : categories.find(item => item.value === categoryField)?.label}
                     </div>
 
-                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showCategory ? '' : 'hidden'}`}>
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showCategory ? '' : 'hidden'}`}>
 
                         <li
-                            className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
+                            className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
                                 setCategoryField('all');
                                 closeAll();
@@ -154,7 +155,7 @@ function RecentTransactions({
                         {categories.map((category, index) => (
                             <li
                                 key={index}
-                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
+                                className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                                 onClick={() => {
                                     setCategoryField(category.value);
                                     closeAll();
@@ -168,7 +169,7 @@ function RecentTransactions({
 
                 </div>
 
-                <div className="recent-transactions__sorting max-w-[120px] w-full bg-gray-100 rounded-sm border-field p-1 relative">
+                <div className="recent-transactions__sorting max-w-[120px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
 
                     <div
                         className='cursor-pointer'
@@ -177,12 +178,12 @@ function RecentTransactions({
                         {sorts.find(sort => sort.value === sortField)?.label}
                     </div>
 
-                    <ul className={`w-full border rounded-sm p-1 absolute right-0 mt-1 bg-white z-10 ${showSort ? '' : 'hidden'}`}>
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showSort ? '' : 'hidden'}`}>
 
                         {sorts.map(sort => (
                             <li
                                 key={sort.value}
-                                className='cursor-pointer hover:bg-gray-100 rounded-sm p-1'
+                                className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                                 onClick={() => {
                                     setSortField(sort.value);
                                     closeAll();
