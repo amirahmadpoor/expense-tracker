@@ -31,7 +31,7 @@ function BoxTransaction({ id, title, amount, type, category, date, categories, r
                     <span className='font-bold'>
                         {title}
                     </span>
-                    <div className='text-gray-400 flex gap-2'>
+                    <div className='text-gray-400 flex items-center gap-2'>
                         {categoryLabel && (
                             <span>
                                 {categoryLabel} -
@@ -42,7 +42,7 @@ function BoxTransaction({ id, title, amount, type, category, date, categories, r
                 </div>
             </div>
 
-            <div className='sm:max-w-[200px] md:max-w-[250px] xl:max-w-[400px] w-full md:text-sm xl:text-body flex items-end justify-between gap-2 flex-col-reverse sm:flex-row'>
+            <div className='max-w-[150px] sm:max-w-[200px] md:max-w-[250px] xl:max-w-[400px] w-full md:text-sm xl:text-body flex items-end justify-between gap-2 flex-col-reverse sm:flex-row'>
                 <div className="box__center">
                     <span className={`box__amount 
                     ${type === 'expense'
