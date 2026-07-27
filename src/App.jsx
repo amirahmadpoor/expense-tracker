@@ -126,8 +126,9 @@ function App() {
     const theme = localStorage.getItem('theme');
     document.documentElement.classList.add(theme);
   }
-
+  
   const toggleDarkMode = () => {
+    const theme = localStorage.getItem('theme');
     if (!theme) {
       localStorage.setItem('theme', 'light');
       document.documentElement.classList.add('light');
