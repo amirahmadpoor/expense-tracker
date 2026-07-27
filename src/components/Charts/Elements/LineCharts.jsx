@@ -1,22 +1,22 @@
-import { ArrowLeft, ArrowLeftCircle, ArrowRight, ArrowRightCircle } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
+import { useState } from 'react'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 function LineCharts({ costs }) {
     const [page, setPage] = useState(0);
     const months = [
-        { id: 1, name: 'فروردین', amount: null, },
-        { id: 2, name: 'اردیبهشت', amount: null, },
-        { id: 3, name: 'خرداد', amount: null, },
-        { id: 4, name: 'تیر', amount: null, },
-        { id: 5, name: 'مرداد', amount: null, },
-        { id: 6, name: 'شهریور', amount: null, },
-        { id: 7, name: 'مهر', amount: null, },
-        { id: 8, name: 'آبان', amount: null, },
-        { id: 9, name: 'آذر', amount: null, },
-        { id: 10, name: 'دی', amount: null, },
-        { id: 11, name: 'بهمن', amount: null, },
-        { id: 12, name: 'اسفند', amount: null, },
+        { id: 1, name: 'فروردین', amount: 0, },
+        { id: 2, name: 'اردیبهشت', amount: 0, },
+        { id: 3, name: 'خرداد', amount: 0, },
+        { id: 4, name: 'تیر', amount: 0, },
+        { id: 5, name: 'مرداد', amount: 0, },
+        { id: 6, name: 'شهریور', amount: 0, },
+        { id: 7, name: 'مهر', amount: 0, },
+        { id: 8, name: 'آبان', amount: 0, },
+        { id: 9, name: 'آذر', amount: 0, },
+        { id: 10, name: 'دی', amount: 0, },
+        { id: 11, name: 'بهمن', amount: 0, },
+        { id: 12, name: 'اسفند', amount: 0, },
     ]
 
     const getExpenses = () => {
@@ -44,71 +44,81 @@ function LineCharts({ costs }) {
 
 
     return (
-        <div className="analytic__line-chart w-full h-full border-field shadow-card p-2">
-            <div className="line-chart-header flex items-center justify-between">
-                <span className='font-bold text-sm'>
+        <div className="analytic__line-chart flex w-full min-w-0 flex-col gap-4 rounded-sm border-field bg-surface p-3 shadow-card">
+            <div className="line-chart-header flex items-center justify-between gap-3">
+                <span className='text-sm font-bold text-text-primary md:text-base'>
                     {page === 0 ? 'هزینه نیمسال اول' : 'هزینه نیمسال دوم'}
                 </span>
-                <div className="select-month flex">
-                    <div
-                        className={`select-month__next flex gap-2 ${page !== 0 && 'hidden'}`}
-                        onClick={() => setPage(1)}
-                    >
-                        <ArrowLeftCircle />
-                    </div>
-                    <div
-                        className={`select-month__previous ${page !== 1 && 'hidden'}`}
+                <div className="select-month flex items-center gap-2">
+                    <button
+                        type="button"
+                        aria-label="نیمسال قبل"
+                        className={`select-month__previous inline-flex w-9 h-9 items-center justify-center rounded-full border border-border bg-surface-2 text-text-primary transition hover:border-primary hover:bg-primary-light hover:text-primary ${page !== 1 ? 'opacity-40' : ''}`}
                         onClick={() => setPage(0)}
+                        disabled={page !== 1}
                     >
-                        <ArrowRightCircle />
-                    </div>
+                        <ArrowRightCircle className="h-5 w-5" />
+                    </button>
+                    <button
+                        type="button"
+                        aria-label="نیمسال بعد"
+                        className={`select-month__next inline-flex w-9 h-9 items-center justify-center rounded-full border border-border bg-surface-2 text-text-primary transition hover:border-primary hover:bg-primary-light hover:text-primary ${page !== 0 ? 'opacity-40' : ''}`}
+                        onClick={() => setPage(1)}
+                        disabled={page !== 0}
+                    >
+                        <ArrowLeftCircle className="h-5 w-5" />
+                    </button>
                 </div>
             </div>
 
-            <ResponsiveContainer width='100%' height='95%' >
-                <LineChart
-                    data={chartData}
-                    style={{
-                        padding: '0.5rem'
-                    }}
-                >
-                    <XAxis
-                        dataKey="name"
-                        fontSize={12}
-                        interval={0}
-                        reversed
-                    />
-                    <YAxis
-                        width={65}
-                        fontSize={12}
-                        tickFormatter={(value) => value.toLocaleString("fa-IR")}
-                        orientation="right"
-                        tickMargin={60}
-                        domain={[0, (dataMax) => (dataMax === 0 ? 1000000 : dataMax)]}
-                    />
-                    <Tooltip
-                        contentStyle={{
-                            borderRadius: "12px",
-                            border: "none",
-                            boxShadow: "0 4px 12px rgba(0,0,0,.15)",
-                            fontSize: '12px'
-                        }}
-                        formatter={(value) => value.toLocaleString("fa-IR")}
-                    />
-                    <CartesianGrid />
-                    <Line
-                        type="monotone"
-                        dataKey="amount"
-                        name='جمع کل'
-                        stroke="var(--color-primary)"
-                        strokeWidth={2}
-                        connectNulls
-                        unit=' تومان'
-                        dot={{ r: 4, fill: 'var(--color-primary)' }}
-                        activeDot={{ r: 6 }}
-                    />
-                </LineChart>
-            </ResponsiveContainer >
+            <div className="h-55 w-full min-w-0 overflow-hidden sm:h-60 md:h-70 lg:h-80">
+                <ResponsiveContainer width='100%' height='100%' >
+                    <LineChart
+                        data={chartData}
+                        margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+                    >
+                        <XAxis
+                            dataKey="name"
+                            tick={{ fill: 'var(--text-secondary)' }}
+                            fontSize={11}
+                            interval={0}
+                            reversed
+                            tickMargin={10}
+                        />
+                        <YAxis
+                            width={60}
+                            tick={{ fill: 'var(--text-secondary)' }}
+                            fontSize={11}
+                            tickFormatter={(value) => value.toLocaleString("fa-IR")}
+                            orientation="right"
+                            tickMargin={50}
+                            domain={[0, (dataMax) => (dataMax === 0 ? 1000000 : dataMax)]}
+                        />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: 'var(--surface)',
+                                border: '1px solid var(--border)',
+                                borderRadius: "12px",
+                                boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+                                fontSize: '12px',
+                                color: '#000'
+                            }}
+                            formatter={(value) => value.toLocaleString("fa-IR")}
+                        />
+                        <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                        <Line
+                            type="monotone"
+                            dataKey="amount"
+                            name='جمع کل'
+                            stroke="var(--color-primary)"
+                            strokeWidth={3}
+                            unit=' تومان'
+                            dot={{ r: 3, fill: 'var(--color-primary)' }}
+                            activeDot={{ r: 6 }}
+                        />
+                    </LineChart>
+                </ResponsiveContainer >
+            </div>
         </div>
     )
 }

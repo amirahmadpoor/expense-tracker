@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import AddCostForm from './components/AddCostForm/AddCostForm'
 import RecentTransactions from './components/RecentTransactions/RecentTransactions'
-import { icons, LineChart, NotebookTabs, SunMoon, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
+import { NotebookTabs, SunMoon, TrendingDown, TrendingUp, User, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Charts from './components/Charts/Charts'
 import BoxBudget from './components/BoxBudget/BoxBudget'
@@ -164,13 +164,13 @@ function App() {
 
   return (
     <>
-      <header className='header col-span-full w-full h-20 bg-surface flex items-center rounded-sm'>
-        <div className="header-wrapper container w-full m-auto w-5xl flex items-center justify-between">
-          <div className="header__right flex gap-2 items-center">
+      <header className='header col-span-full w-full rounded-sm bg-surface px-2 py-3'>
+        <div className="header-wrapper container mx-auto flex items-center justify-between w-full">
+          <div className="header__right flex items-center gap-2">
             <span>
               <img src="/expense-tracker/logo.png" alt="" width={50} />
             </span>
-            <h2 className='font-bold text-2xl'>مدیریت هزینه</h2>
+            <h2 className='text-xl font-bold sm:block hidden'>مدیریت هزینه</h2>
           </div>
           <div className='header__left flex items-center gap-2.5'>
             <span className='btn-header bg-surface'
@@ -185,11 +185,11 @@ function App() {
         </div>
       </header>
 
-      <div className='container grid sm:grid-cols-2 md:grid-cols-4 gap-2 mx-auto mt-2'>
+      <div className='container mx-auto mt-2 grid gap-2 md:grid-cols-4'>
         <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
 
-        <div className="statistics w-full min-h-[30] col-span-4 flex items-center flex-wrap md:flex-nowrap gap-2">
-          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+        <div className="statistics col-span-4 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
+          <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
             <div className="box__title-price flex flex-col">
               <span className='box__title'>کل در آمد</span>
               <span className='box__price text-success'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
@@ -197,7 +197,7 @@ function App() {
             <div className='box__icon p-4 rounded-full text-success bg-success-light'><TrendingUp /></div>
           </div>
 
-          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+          <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
             <div className="box__title-price flex flex-col">
               <span className='box__title'>کل هزینه</span>
               <span className='box__price text-danger'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
@@ -205,14 +205,14 @@ function App() {
             <div className='box__icon p-4 rounded-full text-danger bg-danger-light'><TrendingDown /></div>
           </div>
 
-          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+          <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
             <div className="box__title-price flex flex-col">
               <span className='box__title'>موجودی</span>
               <span className='box__price text-primary'>{Number(balance).toLocaleString('fa-IR')} تومان</span>
             </div>
             <div className='box__icon p-4 rounded-full bg-primary-light text-primary'><WalletMinimal /></div>
           </div>
-          <div className="box card w-full min-w-[230px] h-full bg-surface flex items-center justify-between rounded-sm p-4">
+          <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
             <div className="box__title-price flex flex-col">
               <span className='box__title'>تراکنش‌ها</span>
               <span className='box__price text-purple'>{costs.length.toLocaleString('fa-IR')}</span>
@@ -221,36 +221,41 @@ function App() {
           </div>
         </div>
 
-        <div className="main-right flex flex-col gap-2">
-          <AddCostForm
-            typeCost={typeCost}
-            categories={categories}
-            costs={costs}
-            setCosts={setCosts}
-            addCostsDB={addCostsDB}
-            getAllCostsDB={getAllCostsDB}
-            editingCost={editingCost}
-            editCostsDB={editCostsDB}
-            setEditingCost={setEditingCost}
-          />
+        <div className='col-span-4 grid gap-2 md:grid-cols-4 grid-cols-1'>
+          <div className="main-right flex min-w-0 flex-col gap-2">
+            <AddCostForm
+              typeCost={typeCost}
+              categories={categories}
+              costs={costs}
+              setCosts={setCosts}
+              addCostsDB={addCostsDB}
+              getAllCostsDB={getAllCostsDB}
+              editingCost={editingCost}
+              editCostsDB={editCostsDB}
+              setEditingCost={setEditingCost}
+            />
 
-          <BoxBudget />
-        </div>
+            <BoxBudget />
+          </div>
 
-        <div className="main-left w-full col-span-1 col-span-3 flex flex-col gap-2">
-          <RecentTransactions
-            costs={costs}
-            removeCostsDB={removeCostsDB}
-            editingCost={editingCost}
-            setEditingCost={setEditingCost}
-            typeCost={typeCost}
-            categories={categories}
-          />
+          <div className="main-left flex flex-col gap-2 md:col-span-3 col-span-1">
+            <RecentTransactions
+              costs={costs}
+              removeCostsDB={removeCostsDB}
+              editingCost={editingCost}
+              setEditingCost={setEditingCost}
+              typeCost={typeCost}
+              categories={categories}
+            />
+
+            <Charts
+              costs={costs}
+            />
+          </div>
 
 
-          <Charts
-            costs={costs}
-          />
+          {/* <div className=' xl:col-span-3 md:col-span-2 col-span-1'>
+          </div> */}
         </div>
 
 

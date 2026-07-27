@@ -79,14 +79,14 @@ function RecentTransactions({
     }
 
     return (
-        <div className='recent-transactions card md:col-start-2 md:col-span-3 md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
+        <div className='recent-transactions card md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
 
             <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-border text-sm">
 
-                <div className="recent-transactions__search bg-surface-3 rounded-sm border-field p-1">
+                <div className="recent-transactions__search max-w-[300px] w-full bg-surface-3 rounded-sm border-field p-1">
                     <input
                         type="text"
-                        className='outline-none'
+                        className='outline-none w-full'
                         placeholder='جستجو'
                         onFocus={closeAll}
                         onChange={(e) => { setSearch(e.target.value) }}
@@ -204,7 +204,7 @@ function RecentTransactions({
 
             </header>
 
-            <div className='recent-transactions__transactions flex flex-col gap-2 mt-5 h-[400px] overflow-y-auto'>
+            <div className='recent-transactions__transactions flex flex-col gap-2 mt-5 h-[400px] overflow-y-auto scrollbar-gutter-stable scrollbar-thin scrollbar-thumb-scrollbar-thumb'>
 
                 <span className='font-bold'>
                     تراکنش‌های اخیر

@@ -15,7 +15,7 @@ function BoxTransaction({ id, title, amount, type, category, date, categories, r
     }[category];
 
     return (
-        <div className={`box flex justify-between items-center border-b p-3 border-border`}>
+        <div className='box flex justify-between items-center gap-2 border-b p-3 border-border'>
             <div className="box__right flex items-center gap-2">
                 {type === 'expense'
                     ?
@@ -27,7 +27,7 @@ function BoxTransaction({ id, title, amount, type, category, date, categories, r
                         <TrendingUp />
                     </span>
                 }
-                <div className="box__info w-[200px]">
+                <div className="box__info w-[150px]">
                     <span className='font-bold'>
                         {title}
                     </span>
