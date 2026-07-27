@@ -185,8 +185,9 @@ function App() {
         </div>
       </header>
 
+      <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
+
       <div className='container mx-auto mt-2 grid gap-2 md:grid-cols-4'>
-        <div className='overlay fixed inset-0 bg-black opacity-60 hidden'></div>
 
         <div className="statistics col-span-4 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
           <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
@@ -252,14 +253,7 @@ function App() {
               costs={costs}
             />
           </div>
-
-
-          {/* <div className=' xl:col-span-3 md:col-span-2 col-span-1'>
-          </div> */}
         </div>
-
-
-        {/* <FilterCosts /> */}
       </div>
     </>
   )

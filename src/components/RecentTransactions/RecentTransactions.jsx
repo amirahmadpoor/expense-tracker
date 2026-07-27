@@ -82,7 +82,6 @@ function RecentTransactions({
         <div className='recent-transactions card md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
 
             <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-border text-sm">
-
                 <div className="recent-transactions__search max-w-[300px] w-full bg-surface-3 rounded-sm border-field p-1">
                     <input
                         type="text"
@@ -92,9 +91,7 @@ function RecentTransactions({
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
                 </div>
-
                 <div className="recent-transactions__type max-w-[150px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-
                     <div
                         className='cursor-pointer'
                         onClick={toggleTypeField}
@@ -103,9 +100,7 @@ function RecentTransactions({
                             ? 'همه تراکنش‌ها'
                             : typeCost.find(item => item.value === typeField)?.label}
                     </div>
-
                     <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showType ? '' : 'hidden'}`}>
-
                         <li
                             className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
@@ -115,7 +110,6 @@ function RecentTransactions({
                         >
                             همه تراکنش‌ها
                         </li>
-
                         {typeCost.map((type, index) => (
                             <li
                                 key={index}
@@ -129,13 +123,9 @@ function RecentTransactions({
                                 {type.label}
                             </li>
                         ))}
-
                     </ul>
-
                 </div>
-
                 <div className="recent-transactions__category max-w-[200px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-
                     <div
                         className='cursor-pointer'
                         onClick={toggleCategoryField}
@@ -144,9 +134,7 @@ function RecentTransactions({
                             ? 'همه دسته‌ها'
                             : categories.find(item => item.value === categoryField)?.label}
                     </div>
-
                     <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showCategory ? '' : 'hidden'}`}>
-
                         <li
                             className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
@@ -156,7 +144,6 @@ function RecentTransactions({
                         >
                             همه دسته‌ها
                         </li>
-
                         {categories.map((category, index) => (
                             <li
                                 key={index}
@@ -169,22 +156,16 @@ function RecentTransactions({
                                 {category.label}
                             </li>
                         ))}
-
                     </ul>
-
                 </div>
-
                 <div className="recent-transactions__sorting max-w-[120px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-
                     <div
                         className='cursor-pointer'
                         onClick={toggleSortField}
                     >
                         {sorts.find(sort => sort.value === sortField)?.label}
                     </div>
-
                     <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showSort ? '' : 'hidden'}`}>
-
                         {sorts.map(sort => (
                             <li
                                 key={sort.value}
@@ -197,19 +178,14 @@ function RecentTransactions({
                                 {sort.label}
                             </li>
                         ))}
-
                     </ul>
-
                 </div>
-
             </header>
 
             <div className='recent-transactions__transactions flex flex-col gap-2 mt-5 h-[400px] overflow-y-auto scrollbar-gutter-stable scrollbar-thin scrollbar-thumb-scrollbar-thumb'>
-
                 <span className='font-bold'>
                     تراکنش‌های اخیر
                 </span>
-
                 {costsFiltered.length > 0
                     ? costsFiltered.map(cost => (
                         <BoxTransaction
@@ -223,9 +199,7 @@ function RecentTransactions({
                     ))
                     : <NotTransaction />
                 }
-
             </div>
-
         </div>
     );
 }

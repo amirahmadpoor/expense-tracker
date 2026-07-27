@@ -98,10 +98,10 @@ function LineCharts({ costs }) {
                             contentStyle={{
                                 backgroundColor: 'var(--surface)',
                                 border: '1px solid var(--border)',
-                                borderRadius: "12px",
-                                boxShadow: "0 4px 12px rgba(0,0,0,.15)",
-                                fontSize: '12px',
-                                color: '#000'
+                                borderRadius: 'var(--radius-md)',
+                                boxShadow: 'var(--shadow-card)',
+                                fontSize: 'var(--text-small)',
+                                color:'var(--text-primary)'
                             }}
                             formatter={(value) => value.toLocaleString("fa-IR")}
                         />
