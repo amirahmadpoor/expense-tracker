@@ -42,7 +42,7 @@ function BoxTransaction({ id, title, amount, type, category, date, categories, r
                 </div>
             </div>
 
-            <div className='max-w-[150px] sm:max-w-[200px] md:max-w-[250px] xl:max-w-[400px] w-full md:text-sm xl:text-body flex items-end justify-between gap-2 flex-col-reverse sm:flex-row'>
+            <div className='max-w-[100px] sm:max-w-[200px] md:max-w-[250px] xl:max-w-[400px] w-full md:text-sm xl:text-body flex items-end justify-between gap-2 flex-col-reverse sm:flex-row'>
                 <div className="box__center">
                     <span className={`box__amount 
                     ${type === 'expense'
