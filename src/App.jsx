@@ -114,7 +114,7 @@ function App() {
     request.onsuccess = async () => {
       showSuccessToast('تراکنش با موفقیت حذف شد.');
       const costs = await getAllCostsDB();
-      setCosts(costs)
+      setCosts(costs);
     }
 
     request.onerror = () => {
@@ -122,8 +122,12 @@ function App() {
     }
   };
 
-  const toggleDarkMode = () => {
+  const checkTheme = () => {
     const theme = localStorage.getItem('theme');
+    document.documentElement.classList.add(theme);
+  }
+
+  const toggleDarkMode = () => {
     if (!theme) {
       localStorage.setItem('theme', 'light');
       document.documentElement.classList.add('light');
@@ -159,7 +163,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    toggleDarkMode();
+    checkTheme();
   }, [])
 
   return (
