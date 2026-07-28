@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
 
@@ -13,6 +13,7 @@ function RecentTransactions({
 
     const FILTER_ALL = 'all';
     const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
     const [typeField, setTypeField] = useState(FILTER_ALL);
     const [categoryField, setCategoryField] = useState(FILTER_ALL);
     const [sortField, setSortField] = useState('newest');
@@ -53,30 +54,41 @@ function RecentTransactions({
         setShowCategory(false);
     };
 
+    useEffect(() => {
+        const handleDebounce = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 800);
 
-    let costsFiltered = costs
-        .filter(cost => cost.title.includes(search))
-        .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
-        .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
+        return () => clearTimeout(handleDebounce);
+    }, [search]);
 
-    switch (sortField) {
-        case 'highest':
-            costsFiltered.sort((a, b) => Number(b.amount) - Number(a.amount));
-            break;
+    const costsFiltered = useMemo(() => {
+        const result = costs
+            .filter(cost => cost.title.toLowerCase().includes(debouncedSearch.toLowerCase().trim()))
+            .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
+            .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
+        switch (sortField) {
+            case 'highest':
+                result.sort((a, b) => Number(b.amount) - Number(a.amount));
+                break;
 
-        case 'lowest':
-            costsFiltered.sort((a, b) => Number(a.amount) - Number(b.amount));
-            break;
+            case 'lowest':
+                result.sort((a, b) => Number(a.amount) - Number(b.amount));
+                break;
 
-        case 'oldest':
-            costsFiltered.sort((a, b) => a.date - b.date);
-            break;
+            case 'oldest':
+                result.sort((a, b) => a.date - b.date);
+                break;
 
-        case 'newest':
-        default:
-            costsFiltered.sort((a, b) => b.date - a.date);
-            break;
-    }
+            case 'newest':
+            default:
+                result.sort((a, b) => b.date - a.date);
+                break;
+        }
+
+        return result;
+    }, [costs, debouncedSearch, typeField, categoryField, sortField]);
+
 
     return (
         <div className='recent-transactions card md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
