@@ -195,12 +195,6 @@ const Register = () => {
             </button>
           </form>
 
-          <div className="my-6 flex items-center gap-4">
-            <div className="flex-1 h-px bg-border"></div>
-            <span className="text-sm text-text-secondary">یا</span>
-            <div className="flex-1 h-px bg-border"></div>
-          </div>
-
           <p className="text-center text-sm text-text-secondary mt-6">
             حساب کاربری دارید؟ <Link to='/login' className="text-success hover:text-success/80 font-semibold">ورود کنید</Link>
           </p>

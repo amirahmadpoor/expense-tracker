@@ -126,12 +126,6 @@ const Login = () => {
               </button>
             </form>
 
-            <div className="my-6 flex items-center gap-4">
-              <div className="flex-1 h-px bg-border"></div>
-              <span className="text-sm text-text-secondary">یا</span>
-              <div className="flex-1 h-px bg-border"></div>
-            </div>
-
             <p className="text-center text-sm text-text-secondary mt-6">
               حساب کاربری ندارید؟ <Link to='/expense-tracker/register' className="text-primary hover:text-primary/80 font-semibold">ثبت نام کنید</Link>
             </p>
