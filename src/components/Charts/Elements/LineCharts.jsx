@@ -1,47 +1,40 @@
 import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 function LineCharts({ costs }) {
     const [page, setPage] = useState(0);
-    const months = [
-        { id: 1, name: 'فروردین', amount: 0, },
-        { id: 2, name: 'اردیبهشت', amount: 0, },
-        { id: 3, name: 'خرداد', amount: 0, },
-        { id: 4, name: 'تیر', amount: 0, },
-        { id: 5, name: 'مرداد', amount: 0, },
-        { id: 6, name: 'شهریور', amount: 0, },
-        { id: 7, name: 'مهر', amount: 0, },
-        { id: 8, name: 'آبان', amount: 0, },
-        { id: 9, name: 'آذر', amount: 0, },
-        { id: 10, name: 'دی', amount: 0, },
-        { id: 11, name: 'بهمن', amount: 0, },
-        { id: 12, name: 'اسفند', amount: 0, },
-    ]
 
-    const getExpenses = () => {
-        return costs.filter(cost => cost.type === 'expense');
-    }
-
-
-    const getAmountsExpense = () => {
-        const expenses = getExpenses();
+    const chartData = useMemo(() => {
+        const months = [
+            { id: 1, name: 'فروردین', amount: 0, },
+            { id: 2, name: 'اردیبهشت', amount: 0, },
+            { id: 3, name: 'خرداد', amount: 0, },
+            { id: 4, name: 'تیر', amount: 0, },
+            { id: 5, name: 'مرداد', amount: 0, },
+            { id: 6, name: 'شهریور', amount: 0, },
+            { id: 7, name: 'مهر', amount: 0, },
+            { id: 8, name: 'آبان', amount: 0, },
+            { id: 9, name: 'آذر', amount: 0, },
+            { id: 10, name: 'دی', amount: 0, },
+            { id: 11, name: 'بهمن', amount: 0, },
+            { id: 12, name: 'اسفند', amount: 0, },
+        ]
 
         const toEnglishNumber = str =>
             str.replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
 
-        expenses.forEach(expense => {
-            const expenseMonth = Number(
-                toEnglishNumber(expense.date.toLocaleDateString('fa-IR').split('/')[1])
-            );
+        costs.filter(cost => cost.type === 'expense')
+            .forEach(expense => {
+                const expenseMonth = Number(
+                    toEnglishNumber(expense.date.toLocaleDateString('fa-IR').split('/')[1])
+                );
 
-            months[expenseMonth - 1].amount += Number(expense.amount)
-        })
-        return months;
-    }
-
-    const chartData = getAmountsExpense().slice(page * 6, page * 6 + 6);
-
+                months[expenseMonth - 1].amount += Number(expense.amount)
+            })
+            
+        return months.slice(page * 6, page * 6 + 6);
+    }, [costs, page]);
 
     return (
         <div className="analytic__line-chart flex w-full min-w-0 flex-col gap-4 rounded-sm border-field bg-surface p-3 shadow-card">
@@ -101,7 +94,7 @@ function LineCharts({ costs }) {
                                 borderRadius: 'var(--radius-md)',
                                 boxShadow: 'var(--shadow-card)',
                                 fontSize: 'var(--text-small)',
-                                color:'var(--text-primary)'
+                                color: 'var(--text-primary)'
                             }}
                             formatter={(value) => value.toLocaleString("fa-IR")}
                         />
