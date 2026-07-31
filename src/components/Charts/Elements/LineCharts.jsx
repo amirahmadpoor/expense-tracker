@@ -64,11 +64,11 @@ function LineCharts({ costs }) {
                 </div>
             </div>
 
-            <div className="h-55 w-full min-w-0 overflow-hidden sm:h-60 md:h-70 lg:h-80">
-                <ResponsiveContainer width='100%' height='100%' >
+            <div className="h-55 w-full min-w-0 overflow-hidden sm:h-60 md:h-70 lg:h-80 p-2">
+                <ResponsiveContainer width='100%' height='100%'>
                     <LineChart
                         data={chartData}
-                        margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+                        margin={{ top: 8, right: 8, left: 15, bottom: 0}}
                     >
                         <XAxis
                             dataKey="name"
@@ -84,7 +84,7 @@ function LineCharts({ costs }) {
                             fontSize={11}
                             tickFormatter={(value) => value.toLocaleString("fa-IR")}
                             orientation="right"
-                            tickMargin={50}
+                            tickMargin={60}
                             domain={[0, (dataMax) => (dataMax === 0 ? 1000000 : dataMax)]}
                         />
                         <Tooltip
