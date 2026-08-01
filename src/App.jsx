@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import UserLayout from './Layouts/UserLayout'
 import AuthLayout from './Layouts/AuthLayout'
+import Budgeting from './pages/Budgeting'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
     <Routes>
       <Route element={<UserLayout />}>
         <Route path='/' element={<Home />} />
+        <Route path='/budgeting' element={<Budgeting />} />
       </Route>
 
       <Route element={<AuthLayout />}>
