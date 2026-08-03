@@ -209,3 +209,9 @@
     max-width: 0;
     transform: translateX(250px);
 }
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

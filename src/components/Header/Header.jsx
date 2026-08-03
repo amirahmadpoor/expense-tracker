@@ -20,7 +20,7 @@ const Header = ({openMenu, setOpenMenu}) => {
     }
 
     return (
-        <header className='header sticky top-0 col-span-full w-full rounded-sm bg-surface px-2 py-3'>
+        <header className='header sticky top-0 col-span-full w-full rounded-sm bg-surface py-3'>
             <div className="header-wrapper container mx-auto flex items-center justify-between w-full">
                 <div className="header__right flex items-center gap-2">
                     <Menu
