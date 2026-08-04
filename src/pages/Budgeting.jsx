@@ -1,9 +1,70 @@
-import { Calendar, Filter, Hamburger, LayoutGrid, NotebookTabs, Plus, SortAsc, SortDesc, TrendingDown, Wallet, WalletMinimal } from 'lucide-react'
-import React from 'react'
+import { Banknote, Book, Calendar, Car, Filter, Gamepad, Hamburger, Hospital, LayoutGrid, MoreHorizontal, NotebookTabs, Plus, Receipt, SortAsc, SortDesc, TrendingDown, Wallet, WalletMinimal } from 'lucide-react'
+import React, { useState } from 'react'
 import SummaryCard from '../components/SummaryCard/SummaryCard'
 import CategoryRow from '../components/CategoryRow/CategoryRow'
 
 const Budgeting = () => {
+  const [sortFiled, setSortFiled] = useState('highest');
+  const [showSort, setShowSort] = useState(false);
+  const sorts = [
+    { value: 'highest', label: 'بیشترین مبلغ' },
+    { value: 'lowest', label: 'کمترین مبلغ' },
+    { value: 'Finished', label: 'تمام شده' },
+    { value: 'notSpecified', label: 'تعیین نشده' },
+  ]
+
+  const categories = [
+    {
+      id: 1,
+      title: 'غذا',
+      textColor: 'text-success',
+      bgColor: 'bg-success-light',
+      icon: <Hamburger />
+    },
+    {
+      id: 2,
+      title: 'حمل و نقل',
+      textColor: 'text-primary',
+      bgColor: 'bg-primary-light',
+      icon: <Car />
+    },
+    {
+      id: 3,
+      title: 'قبض',
+      textColor: 'text-warning',
+      bgColor: 'bg-warning-light',
+      icon: <Receipt />
+    },
+    {
+      id: 4,
+      title: 'سرگرمی',
+      textColor: 'text-purple',
+      bgColor: 'bg-purple-light',
+      icon: <Gamepad />
+    },
+    {
+      id: 5,
+      title: 'بهداشت',
+      textColor: 'text-danger',
+      bgColor: 'bg-danger-light',
+      icon: <Hospital />
+    },
+    {
+      id: 6,
+      title: 'آموزش',
+      textColor: 'text-yellow-300',
+      bgColor: 'bg-yellow-100',
+      icon: <Book />
+    },
+    {
+      id: 7,
+      title: 'سایر',
+      textColor: 'text-text-secondary',
+      bgColor: 'bg-surface-3',
+      icon: <MoreHorizontal />
+    },
+  ];
+
   return (
     <div className='container mx-auto mt-5'>
       <header className=' flex justify-between items-center'>
@@ -53,35 +114,52 @@ const Budgeting = () => {
       </div>
 
       <div className='flex items-center justify-between mt-5'>
-        <div className='flex items-center gap-2'>
-          <div className='center-content gap-2 border-border border-text-secondary shadow-card px-4 py-2 rounded-sm'>
-            مرتب سازی
+        <div
+          className='max-w-[260px] w-full flex items-center gap-2'
+          onClick={() => setShowSort(!showSort)}
+        >
+          <div className='w-full center-content btn-filter relative'>
+            {sorts.find(sort => sort.value === sortFiled)?.label}
             <SortDesc />
+            <div className={`w-full absolute translate-y-[65%] p-1 bg-surface border border-border rounded-sm text-sm transition-all duration-200 ${!showSort && 'invisible opacity-0'}`}>
+              {sorts.map((sort, index) =>
+                <div
+                  key={index}
+                  className='hover:bg-surface-2 p-2 rounded-sm'
+                  onClick={() => setSortFiled(sort.value)}
+                >
+                  {sort.label}
+                </div>)}
+            </div>
           </div>
-          <div className='center-content gap-2 border-border border-text-secondary shadow-card px-4 py-2 rounded-sm'>
+          <div className='center-content btn-filter'>
             فیلتر
             <Filter />
           </div>
         </div>
-        <div className='center-content gap-2 bg-primary text-white p-2 rounded-sm'>
+        <div className='center-content gap-2 bg-primary text-white p-2 rounded-sm cursor-pointer transition-all duration-200 hover:bg-primary-light'>
           افزودن بودجه
           <Plus width={20} height={20} />
         </div>
       </div>
 
       <div className='flex flex-col gap-3 mt-10'>
-        <CategoryRow
-          title='غذا و خوراکی'
-          textColor='text-success'
-          bgColor='bg-success-light'
-          icon={<Hamburger />}
-          budget={2200000}
-          remainder={300000}
-          statusBudget='hard'
-        />
+
+        {categories.map(category =>
+          <CategoryRow
+            key={category.id}
+            title={category.title}
+            textColor={category.textColor}
+            bgColor={category.bgColor}
+            icon={category.icon}
+            budget={3000000}
+            cost={2200000}
+          />
+        )}
+
       </div>
 
-    </div>
+    </div >
   )
 }
 

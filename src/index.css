@@ -215,3 +215,7 @@
     align-items: center;
     justify-content: center;
 }
+
+.btn-filter {
+    @apply bg-surface gap-2 border border-border shadow-card px-4 py-2 rounded-sm cursor-pointer;
+}

@@ -62,7 +62,6 @@ const Home = () => {
         { value: 'transport', label: 'حمل و نقل' },
         { value: 'bill', label: 'قبض' },
         { value: 'entertainment', label: 'سرگرمی' },
-        { value: 'shopping', label: 'خرید' },
         { value: 'health', label: 'بهداشت' },
         { value: 'education', label: 'آموزش' },
         { value: 'other', label: 'سایر' },

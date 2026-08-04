@@ -22,8 +22,8 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
             <div
                 className={`item p-4 ${selectItem === value && 'bg-primary text-white'} ${selectItem !== value && 'hover:bg-surface-2'} transition-colors duration-300 rounded-sm flex items-center gap-2 cursor-pointer`}
                 onClick={() => {
-                    setOpenMenu(false);
                     setSelectItem(value);
+                    setOpenMenu(false);
                 }}
             >
                 <Icon width={20} height={20} />
