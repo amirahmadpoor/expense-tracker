@@ -25,7 +25,7 @@ function App() {
     <Routes>
       <Route element={<UserLayout />}>
         <Route path='/' element={<Home />} />
-        <Route path='/budgeting' element={<Budgeting />} />
+        <Route path='/budget' element={<Budgeting />} />
       </Route>
 
       <Route element={<AuthLayout />}>

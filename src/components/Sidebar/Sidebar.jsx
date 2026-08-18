@@ -1,16 +1,16 @@
 import { Edit2, Home, LayoutGrid, Settings, Ticket, User, Wallet } from 'lucide-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 const Sidebar = ({ openMenu, setOpenMenu }) => {
-    const [selectItem, setSelectItem] = useState('home');
+    const activeTab = useLocation();
 
     const subMenus = [
-        { value: 'home', title: 'خانه' },
-        { value: 'transactions', title: 'تراکنش‌ها' },
-        { value: 'budget', title: 'بودجه' },
-        { value: 'category', title: 'دسته‌ها' },
-        { value: 'setting', title: 'تنظیمات' },
+        { id: 1, value: '/', title: 'خانه', icon: Home },
+        { id: 2, value: '/transactions', title: 'تراکنش‌ها', icon: Ticket },
+        { id: 3, value: '/budget', title: 'بودجه', icon: Wallet },
+        { id: 4, value: '/category', title: 'دسته‌ها', icon: LayoutGrid },
+        { id: 5, value: '/setting', title: 'تنظیمات', icon: Settings },
     ]
 
     const checkSelect = () => {
@@ -20,9 +20,8 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
     const ItemMenu = ({ icon: Icon, title, value }) => {
         return (
             <div
-                className={`item p-4 ${selectItem === value && 'bg-primary text-white'} ${selectItem !== value && 'hover:bg-surface-2'} transition-colors duration-300 rounded-sm flex items-center gap-2 cursor-pointer`}
+                className={`item p-4 ${activeTab.pathname === value && 'bg-primary text-white'} ${activeTab.pathname !== value && 'hover:bg-surface-2'} transition-colors duration-300 rounded-sm flex items-center gap-2 cursor-pointer`}
                 onClick={() => {
-                    setSelectItem(value);
                     setOpenMenu(false);
                 }}
             >
@@ -47,18 +46,11 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
 
             <ul className="sidebar__items flex flex-col gap-1 p-2">
 
-                <Link to='/'>
-                    <ItemMenu icon={Home} title='خانه' value='home' />
-                </Link>
-
-                <ItemMenu icon={Ticket} title='تراکنش‌ها' value='transactions' />
-
-                <Link to='/budgeting'>
-                    <ItemMenu icon={Wallet} title='بودجه' value='budget' />
-                </Link>
-
-                <ItemMenu icon={LayoutGrid} title='دسته‌ها' value='category' />
-                <ItemMenu icon={Settings} title='تنظیمات' value='setting' />
+                {subMenus.map(subMenu =>
+                    <Link key={subMenu.id} to={subMenu.value}>
+                        <ItemMenu {...subMenu} />
+                    </Link>
+                )}
 
             </ul>
 

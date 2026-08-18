@@ -19,15 +19,17 @@ const NotFound = () => {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              to="/expense-tracker"
+              to="/"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm bg-gradient-to-r from-indigo-600 to-sky-400 text-white"
             >
               بازگشت به صفحه اصلی
             </Link>
 
-            <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-200 text-indigo-600 bg-white">
+            <Link className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-200 text-indigo-600 bg-white"
+              // to={history}
+            >
               بازگشت
-            </button>
+            </Link>
           </div>
         </section>
 

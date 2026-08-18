@@ -54,14 +54,16 @@ const Login = () => {
     if (!validate()) return;
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (rememberMe) localStorage.setItem('rememberEmail', email);
-      toast.success('خوش آمدید!');
-      setEmail('');
-      setPassword('');
-      navigate('/');
-    }, 1500);
+
+      setTimeout(() => {
+        if (rememberMe) localStorage.setItem('rememberEmail', email);
+        toast.success('خوش آمدید!');
+        setEmail('');
+        setPassword('');
+        navigate('/');
+        setLoading(false);
+      }, 2000);
+
   };
 
   return (
@@ -103,7 +105,7 @@ const Login = () => {
 
             <div className="flex items-center justify-between pt-2">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="w-4 h-4 rounded border-2 border-border bg-surface checked:bg-primary cursor-pointer accent-primary" disabled={loading} />
+                <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="w-4 h-4 rounded border-2 border-border bg-surface checked:bg-primary cursor-pointer bg-accent-primary" disabled={loading} />
                 <span className="text-sm text-text-secondary">مرا به خاطر داشته باش</span>
               </label>
               <a href="#" className="text-sm text-primary hover:text-primary/80 font-medium">فراموش کردم</a>

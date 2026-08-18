@@ -9,8 +9,6 @@ const Budgeting = () => {
   const sorts = [
     { value: 'highest', label: 'بیشترین مبلغ' },
     { value: 'lowest', label: 'کمترین مبلغ' },
-    { value: 'Finished', label: 'تمام شده' },
-    { value: 'notSpecified', label: 'تعیین نشده' },
   ]
 
   const categories = [
@@ -121,7 +119,7 @@ const Budgeting = () => {
           <div className='w-full center-content btn-filter relative'>
             {sorts.find(sort => sort.value === sortFiled)?.label}
             <SortDesc />
-            <div className={`w-full absolute translate-y-[65%] p-1 bg-surface border border-border rounded-sm text-sm transition-all duration-200 ${!showSort && 'invisible opacity-0'}`}>
+            <div className={`w-full absolute translate-y-[80%] p-1 bg-surface border border-border rounded-sm text-sm transition-all duration-200 ${!showSort && 'invisible opacity-0'}`}>
               {sorts.map((sort, index) =>
                 <div
                   key={index}
@@ -132,9 +130,47 @@ const Budgeting = () => {
                 </div>)}
             </div>
           </div>
-          <div className='center-content btn-filter'>
+          <div className='center-content btn-filter relative'>
             فیلتر
             <Filter />
+            <div className='absolute top-11 right-0 w-[400px] flex flex-col gap-4 bg-surface rounded-sm border border-border p-2 hidden'>
+              <span className='font-bold text-lg border-b border-border pb-2'>فیلترها</span>
+
+              <div className='p-2 border-b border-border flex flex-col gap-2'>
+                <span>بودجه</span>
+                <div className='flex flex-col mt-2'>
+                  <div className='flex items-center justify-between'>
+                    <span>0</span>
+                    <span>100000000</span>
+                  </div>
+                  <input type="range" name="" id=""/>
+                </div>
+              </div>
+
+              <div className='px-2'>
+                <span>وضعیت</span>
+                <ul className='text-sm flex flex-col gap-2 p-2'>
+                  <div className='flex items-center justify-between'>
+                    <li>عادی</li>
+                    <input type="checkbox" name="" id="" />
+                  </div>
+                  <div className='flex items-center justify-between'>
+                    <li>در حال اتمام</li>
+                    <input type="checkbox" name="" id="" />
+                  </div>
+                  <div className='flex items-center justify-between'>
+                    <li>تمام شده</li>
+                    <input type="checkbox" name="" id="" />
+                  </div>
+                  <div className='flex items-center justify-between'>
+                    <li>تعیین نشده</li>
+                    <input type="checkbox" name="" id="" />
+                  </div>
+                </ul>
+              </div>
+
+
+            </div>
           </div>
         </div>
         <div className='center-content gap-2 bg-primary text-white p-2 rounded-sm cursor-pointer transition-all duration-200 hover:bg-primary-light'>
@@ -148,10 +184,7 @@ const Budgeting = () => {
         {categories.map(category =>
           <CategoryRow
             key={category.id}
-            title={category.title}
-            textColor={category.textColor}
-            bgColor={category.bgColor}
-            icon={category.icon}
+            {...category}
             budget={3000000}
             cost={2200000}
           />
