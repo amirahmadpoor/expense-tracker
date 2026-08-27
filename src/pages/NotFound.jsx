@@ -1,6 +1,7 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const NotFound = () => {
+  const navigate = useNavigate();
   return (
     <div
       className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center p-6"
@@ -18,18 +19,19 @@ const NotFound = () => {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              to="/"
+            <button
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm bg-gradient-to-r from-indigo-600 to-sky-400 text-white"
+              onClick={() => navigate('/', { replace: true })}
             >
               بازگشت به صفحه اصلی
-            </Link>
+            </button>
 
-            <Link className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-200 text-indigo-600 bg-white"
-              // to={history}
+            <button
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-200 text-indigo-600 bg-white"
+              onClick={() => navigate(-1, { replace: true })}
             >
               بازگشت
-            </Link>
+            </button>
           </div>
         </section>
 
