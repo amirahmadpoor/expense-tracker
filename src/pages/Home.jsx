@@ -5,52 +5,13 @@ import BoxBudget from '../components/BoxBudget/BoxBudget'
 import AddCostForm from '../components/AddCostForm/AddCostForm'
 import { NotebookTabs, TrendingDown, TrendingUp, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { getTransactionsController, deleteTransactionController } from '../controllers/transactions.controller'
 
 const Home = () => {
     const [modal, setModal] = useState(false);
     const [editingCost, setEditingCost] = useState(null);
 
-    let db = useRef(null);
-    let objectStore = null;
-    const [costs, setCosts] = useState([]);
-    const getAllCostsDB = () => {
-        return new Promise((resolve, reject) => {
-
-            const transaction = db.current.transaction('costs', 'readonly');
-            const store = transaction.objectStore('costs');
-
-            const request = store.getAll();
-
-            request.onsuccess = () => {
-                resolve(request.result);
-            }
-
-            request.onerror = () => {
-                reject(request.error);
-            }
-
-        })
-    }
-    useEffect(() => {
-        let indexDB = indexedDB.open('expense-tracker', 1);
-        indexDB.onupgradeneeded = (e) => {
-            db.current = e.target.result;
-            if (!db.current.objectStoreNames.contains('costs')) {
-                objectStore = db.current.createObjectStore('costs', {
-                    keyPath: 'id',
-                    autoIncrement: true,
-                })
-            }
-        }
-
-        indexDB.onsuccess = async (e) => {
-            db.current = e.target.result;
-            const costs = await getAllCostsDB();
-            setCosts(costs)
-        }
-
-    }, []);
-
+    const [transactions, setTransactions] = useState([]);
 
     const typeCost = [
         { value: 'expense', label: 'هزینه' },
@@ -67,73 +28,43 @@ const Home = () => {
         { value: 'other', label: 'سایر' },
     ];
 
+    useEffect(() => {
+        const getTransactions = async () => {
+            const response = await getTransactionsController();
+            setTransactions(response);
+        }
+
+        getTransactions();
+    }, []);
+
+
     const allBuy =
-        costs
-            .filter(cost => cost.type === 'expense')
-            .reduce((sum, cost) => sum + Number(cost.amount), 0);
+        transactions
+            .filter(transaction => transaction.type === 'expense')
+            .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
 
     const allIncome =
-        costs
-            .filter(cost => cost.type === 'income')
-            .reduce((sum, cost) => sum + Number(cost.amount), 0);
+        transactions
+            .filter(transaction => transaction.type === 'income')
+            .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
 
 
     const balance = allIncome - allBuy;
 
 
-    const showSuccessToast = (text) => {
-        toast.success(text);
-    }
+    // const showSuccessToast = (text) => {
+    //     toast.success(text);
+    // }
 
-    const showErrorToast = (text) => {
-        toast.error(text);
-    }
+    // const showErrorToast = (text) => {
+    //     toast.error(text);
+    // }
 
-    const addCostsDB = (cost) => {
-        const transaction = db.current.transaction('costs', 'readwrite');
-        const store = transaction.objectStore('costs');
-        const request = store.add(cost);
+    const deleteTransaction = async (id) => {
+        const response = await deleteTransactionController(id);
 
-        request.onsuccess = async () => {
-            showSuccessToast('تراکنش با موفقیت اضافه شد.');
-            const costs = await getAllCostsDB();
-            setCosts(costs)
-        }
-
-        request.onerror = () => {
-            showSuccessToast('تراکنش با موفقیت اضافه نشد.');
-        }
-    }
-
-    const editCostsDB = (cost) => {
-        const transaction = db.current.transaction('costs', 'readwrite');
-        const store = transaction.objectStore('costs');
-        if (cost.id !== undefined) {
-            const request = store.put(cost);
-            request.onsuccess = async () => {
-                showSuccessToast('ویرایش با موفقیت انجام شد.')
-                const costs = await getAllCostsDB();
-                setCosts(costs)
-            }
-
-            request.onerror = () => {
-                showErrorToast('ویرایش انجام نشد.')
-            }
-        }
-    }
-
-    const removeCostsDB = (id) => {
-        const transaction = db.current.transaction('costs', 'readwrite');
-        const store = transaction.objectStore('costs');
-        const request = store.delete(id);
-        request.onsuccess = async () => {
-            showSuccessToast('تراکنش با موفقیت حذف شد.');
-            const costs = await getAllCostsDB();
-            setCosts(costs);
-        }
-
-        request.onerror = () => {
-            showErrorToast('تراکنش حذف نشد');
+        if (response) {
+            setTransactions(await getTransactionsController());
         }
     };
 
@@ -167,7 +98,7 @@ const Home = () => {
                 <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
                     <div className="box__title-price flex flex-col">
                         <span className='box__title'>تراکنش‌ها</span>
-                        <span className='box__price text-purple'>{costs.length.toLocaleString('fa-IR')}</span>
+                        <span className='box__price text-purple'>{transactions.length.toLocaleString('fa-IR')}</span>
                     </div>
                     <div className='box__icon p-4 rounded-full bg-purple-light text-purple'><NotebookTabs /></div>
                 </div>
@@ -178,12 +109,9 @@ const Home = () => {
                     <AddCostForm
                         typeCost={typeCost}
                         categories={categories}
-                        costs={costs}
-                        setCosts={setCosts}
-                        addCostsDB={addCostsDB}
-                        getAllCostsDB={getAllCostsDB}
+                        transactions={transactions}
+                        setTransactions={setTransactions}
                         editingCost={editingCost}
-                        editCostsDB={editCostsDB}
                         setEditingCost={setEditingCost}
                     />
 
@@ -192,8 +120,8 @@ const Home = () => {
 
                 <div className="main-left flex flex-col gap-2 md:col-span-3 col-span-1">
                     <RecentTransactions
-                        costs={costs}
-                        removeCostsDB={removeCostsDB}
+                        transactions={transactions}
+                        deleteTransaction={deleteTransaction}
                         editingCost={editingCost}
                         setEditingCost={setEditingCost}
                         typeCost={typeCost}
@@ -201,7 +129,7 @@ const Home = () => {
                     />
 
                     <Charts
-                        costs={costs}
+                        costs={transactions}
                     />
                 </div>
             </div>

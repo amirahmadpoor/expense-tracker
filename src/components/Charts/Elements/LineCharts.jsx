@@ -27,12 +27,12 @@ function LineCharts({ costs }) {
         costs.filter(cost => cost.type === 'expense')
             .forEach(expense => {
                 const expenseMonth = Number(
-                    toEnglishNumber(expense.date.toLocaleDateString('fa-IR').split('/')[1])
+                    toEnglishNumber(new Date(expense.date).toLocaleDateString('fa-IR').split('/')[1])
                 );
 
                 months[expenseMonth - 1].amount += Number(expense.amount)
             })
-            
+
         return months.slice(page * 6, page * 6 + 6);
     }, [costs, page]);
 
@@ -68,7 +68,7 @@ function LineCharts({ costs }) {
                 <ResponsiveContainer width='100%' height='100%'>
                     <LineChart
                         data={chartData}
-                        margin={{ top: 8, right: 8, left: 15, bottom: 0}}
+                        margin={{ top: 8, right: 8, left: 15, bottom: 0 }}
                     >
                         <XAxis
                             dataKey="name"

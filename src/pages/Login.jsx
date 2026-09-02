@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Link, Route, Routes, useNavigate, useParams } from 'react-router';
 import Register from './Register';
 import { loginValidation } from '../validations/auth.validation';
+import { supabase } from '../lib/supabase';
 
 const InputField = ({ icon: Icon, type = 'text', placeholder, value, onChange, onToggle, showValue, disabled }) => (
   <div className="relative group">
@@ -55,15 +56,26 @@ const Login = () => {
 
     setLoading(true);
 
-      setTimeout(() => {
-        if (rememberMe) localStorage.setItem('rememberEmail', email);
-        toast.success('خوش آمدید!');
-        setEmail('');
-        setPassword('');
-        navigate('/');
-        setLoading(false);
-      }, 2000);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
+    if (error) {
+      console.error(error.message);
+      setLoading(false);
+      return toast.error('ورود نا موفق!');
+    }
+
+    console.log(data);
+
+
+    setLoading(false);
+    if (rememberMe) localStorage.setItem('rememberEmail', email);
+    toast.success('خوش آمدید!');
+    setEmail('');
+    setPassword('');
+    // navigate('/expense-tracker');
   };
 
   return (
@@ -111,7 +123,10 @@ const Login = () => {
               <a href="#" className="text-sm text-primary hover:text-primary/80 font-medium">فراموش کردم</a>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 transform hover:-translate-y-0.5 transition-all">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 transform hover:-translate-y-0.5 transition-all">
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Link, Route, Routes, useNavigate } from 'react-router';
 import { registerValidation } from '../validations/auth.validation';
 import Login from './Login';
+import { supabase } from '../lib/supabase';
 
 const InputField = ({ label, icon: Icon, type = 'text', placeholder, value, onChange, onToggle, showValue, disabled }) => (
   <div>
@@ -42,6 +43,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
   const validate = () => {
     const validation = registerValidation.safeParse({ fullName, email, password, confirmPassword });
 
@@ -58,16 +60,32 @@ const Register = () => {
     if (!validate()) return;
 
     setLoading(true);
-    setTimeout(() => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name: fullName,
+        },
+      },
+    });
+
+    if (error) {
+      console.error(error.message);
       setLoading(false);
-      toast.success('ثبت نام موفق!');
-      setFullName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-      navigate('/');
-    }, 1500);
-  };
+      return toast.error('ثبت نام نا موفق!');
+    }
+
+    console.log(data);
+
+    setLoading(false);
+    toast.success('ثبت نام موفق!');
+    setFullName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    // navigate('/expense-tracker');
+  }
 
   const strength = password.length >= 8 ? 'قوی' : password.length >= 6 ? 'متوسط' : password.length < 6 && password.length > 0 ? 'حداقل 6 کارکتر لازم است' : '';
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Menu, SunMoon, User } from 'lucide-react'
+import { ChevronDown, Menu, SunMoon, User } from 'lucide-react'
 import { Link } from 'react-router';
+import { getProfileController } from '../../controllers/profile.controller';
 
-const Header = ({openMenu, setOpenMenu}) => {
+const Header = ({ openMenu, setOpenMenu }) => {
 
     const toggleDarkMode = () => {
         const theme = localStorage.getItem('theme');
@@ -40,9 +41,13 @@ const Header = ({openMenu, setOpenMenu}) => {
                     >
                         <SunMoon />
                     </span>
-                    <span className='btn-header bg-surface'>
-                        <Link to={'/login'}><User /></Link>
-                    </span>
+
+                    {getProfileController.error &&
+                        <span className='btn-header bg-surface'>
+                            <Link to={'/login'}><User /></Link>
+                        </span>
+                    }
+
                 </div>
             </div>
         </header>

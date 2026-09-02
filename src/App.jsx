@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { Link, Route, Routes } from 'react-router'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-import UserLayout from './Layouts/UserLayout'
-import AuthLayout from './Layouts/AuthLayout'
-import Budgeting from './pages/Budgeting'
+import router from './route'
+import { RouterProvider } from 'react-router';
 
 function App() {
 
@@ -22,19 +16,9 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route element={<UserLayout />}>
-        <Route path='/' element={<Home />} />
-        <Route path='/budget' element={<Budgeting />} />
-      </Route>
-
-      <Route element={<AuthLayout />}>
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-      </Route>
-
-      <Route path='/*' element={<NotFound />} />
-    </Routes>
+    <>
+      <RouterProvider router={router} />
+    </>
   )
 }
 

@@ -21,7 +21,7 @@ const NotFound = () => {
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm bg-gradient-to-r from-indigo-600 to-sky-400 text-white"
-              onClick={() => navigate('/', { replace: true })}
+              onClick={() => navigate('/expense-tracker', { replace: true })}
             >
               بازگشت به صفحه اصلی
             </button>

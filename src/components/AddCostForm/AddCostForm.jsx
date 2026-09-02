@@ -4,9 +4,16 @@ import DatePickerModule from "react-multi-date-picker";
 import { Calendar } from "react-multi-date-picker"
 import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
+import { getTransactionsController, insertTransactionController, updateTransactionController } from '../../controllers/transactions.controller';
 
-
-function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editingCost, setEditingCost, editCostsDB }) {
+function AddCostForm({
+    typeCost,
+    categories,
+    transactions,
+    setTransactions,
+    editingCost,
+    setEditingCost
+}) {
 
     const DatePicker = DatePickerModule.default;
     const [title, setTitle] = useState('');
@@ -18,6 +25,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
     const [openCategories, setOpenCategories] = useState(false);
     const [selectType, setSelectType] = useState('');
     const [selectCategory, setSelectCategory] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const isValid = title.trim() && amount.trim() && type.trim();
 
@@ -32,31 +40,50 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
         setSelectType('');
     }
 
-    const handleAddCost = () => {
-        const newCost = {
-            title,
-            amount,
-            type,
-            category,
-            date
-        }
+    const handleAddCost = async () => {
+        setLoading(true);
 
-        addCostsDB(newCost);
-        resetForm();
+        try {
+            const newCost = {
+                title,
+                amount,
+                type,
+                category,
+                date
+            }
+
+            await insertTransactionController(newCost);
+
+            await setTransactions(await getTransactionsController());
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+            resetForm();
+        }
     }
 
-    const handleEditCost = () => {
-        const editCost = {
-            id: editingCost.id,
-            title,
-            amount,
-            type,
-            category,
-            date
+    const handleEditCost = async () => {
+        setLoading(true);
+        try {
+            const editCost = {
+                title,
+                amount,
+                type,
+                category,
+                date
+            }
+
+
+            await updateTransactionController(editingCost.id, editCost);
+            await setTransactions(await getTransactionsController());
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+            resetForm();
+            setEditingCost(null);
         }
-        editCostsDB(editCost);
-        resetForm();
-        setEditingCost(null);
     }
 
     useEffect(() => {
@@ -65,7 +92,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
             setAmount(editingCost.amount);
             setType(editingCost.type);
             setCategory(editingCost.category);
-            setDate(editingCost.date);
+            setDate(new Date(editingCost.date));
         }
     }, [editingCost]);
 
@@ -157,7 +184,7 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                                     <li
                                         key={category.value}
                                         className={`h-10 flex items-center rounded-sm p-1 cursor-pointer
-                                            ${selectCategory === category.value && 'bg-surface-3'}`}
+                                            ${category === category.value && 'bg-surface-3'}`}
                                         onClick={() => {
                                             setCategory(category.value);
                                             setOpenCategories(false);
@@ -184,11 +211,24 @@ function AddCostForm({ typeCost, categories, costs, setCosts, addCostsDB, editin
                     />
 
                 </div>
+
                 <button
-                    type='submit'
-                    disabled={!isValid}
-                    className={`btn-submit ${isValid ? 'bg-primary cursor-pointer' : 'bg-surface-3 cursor-not-allowed'} text-white font-bold w-full h-10 rounded-sm mt-2`}
-                >{!editingCost ? 'افزودن' : 'ویرایش'}</button>
+                    type="submit"
+                    disabled={!isValid || loading}
+                    className={`btn-submit ${isValid && !loading
+                        ? 'bg-primary cursor-pointer'
+                        : 'bg-surface-3 cursor-not-allowed'
+                        } text-white font-bold w-full h-10 rounded-sm mt-2 flex items-center justify-center gap-2`}
+                >
+                    {loading ? (
+                        <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>{editingCost ? 'در حال ویرایش...' : 'در حال افزودن...'}</span>
+                        </>
+                    ) : (
+                        editingCost ? 'ویرایش' : 'افزودن'
+                    )}
+                </button>
             </form >
         </div >
     )

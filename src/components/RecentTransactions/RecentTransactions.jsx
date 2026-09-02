@@ -3,8 +3,8 @@ import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
 
 function RecentTransactions({
-    costs,
-    removeCostsDB,
+    transactions,
+    deleteTransaction,
     editingCost,
     setEditingCost,
     typeCost,
@@ -21,6 +21,8 @@ function RecentTransactions({
     const [showType, setShowType] = useState(false);
     const [showCategory, setShowCategory] = useState(false);
     const [showSort, setShowSort] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     const sorts = [
         { value: 'newest', label: 'جدیدترین' },
@@ -63,7 +65,7 @@ function RecentTransactions({
     }, [search]);
 
     const costsFiltered = useMemo(() => {
-        const result = costs
+        const result = transactions
             .filter(cost => cost.title.toLowerCase().includes(debouncedSearch.toLowerCase().trim()))
             .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
             .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
@@ -87,7 +89,7 @@ function RecentTransactions({
         }
 
         return result;
-    }, [costs, debouncedSearch, typeField, categoryField, sortField]);
+    }, [transactions, debouncedSearch, typeField, categoryField, sortField]);
 
 
     return (
@@ -198,14 +200,14 @@ function RecentTransactions({
                 <span className='font-bold'>
                     تراکنش‌های اخیر
                 </span>
+
                 {costsFiltered.length > 0
                     ? costsFiltered.map(cost => (
                         <BoxTransaction
                             key={cost.id}
                             {...cost}
                             categories={categories}
-                            removeCostsDB={removeCostsDB}
-                            editingCost={editingCost}
+                            deleteTransaction={deleteTransaction}
                             setEditingCost={setEditingCost}
                         />
                     ))
