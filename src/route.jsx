@@ -32,6 +32,10 @@ const router = createBrowserRouter([
 
         children: [
             {
+                index: true,
+                Component: Home
+            },
+            {
                 path: 'tracker',
                 Component: Home
             },
