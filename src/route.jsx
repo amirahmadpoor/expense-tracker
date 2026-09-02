@@ -24,8 +24,24 @@ const checkIsLogin = async () => {
     return null;
 };
 
+const checkRoot = async () => {
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
+
+    if (user) {
+        throw redirect("/tracker");
+    }
+
+    throw redirect("/login");
+};
 
 const router = createBrowserRouter([
+    {
+        path: "/",
+        loader: checkRoot,
+    },
+    
     {
         Component: UserLayout,
         loader: checkIsLogin,
