@@ -84,7 +84,7 @@ const Register = () => {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
-    // navigate('/expense-tracker');
+    navigate('/');
   }
 
   const strength = password.length >= 8 ? 'قوی' : password.length >= 6 ? 'متوسط' : password.length < 6 && password.length > 0 ? 'حداقل 6 کارکتر لازم است' : '';

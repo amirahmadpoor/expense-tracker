@@ -8,11 +8,11 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
     const [nameUser, setNameUser] = useState('');
 
     const subMenus = [
-        { id: 1, value: '/expense-tracker', title: 'خانه', icon: Home },
-        { id: 2, value: '/expense-tracker/transactions', title: 'تراکنش‌ها', icon: Ticket },
-        { id: 3, value: '/expense-tracker/budget', title: 'بودجه', icon: Wallet },
-        { id: 4, value: '/expense-tracker/category', title: 'دسته‌ها', icon: LayoutGrid },
-        { id: 5, value: '/expense-tracker/setting', title: 'تنظیمات', icon: Settings },
+        { id: 1, value: '/', title: 'خانه', icon: Home },
+        { id: 2, value: '/transactions', title: 'تراکنش‌ها', icon: Ticket },
+        { id: 3, value: '/budget', title: 'بودجه', icon: Wallet },
+        { id: 4, value: '/category', title: 'دسته‌ها', icon: LayoutGrid },
+        { id: 5, value: '/setting', title: 'تنظیمات', icon: Settings },
     ];
 
     const ItemMenu = ({ icon: Icon, title, value }) => {

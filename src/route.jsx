@@ -1,4 +1,5 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
+
 import Home from "./pages/Home";
 import Budgeting from "./pages/Budgeting";
 import Register from "./pages/Register";
@@ -7,18 +8,36 @@ import NotFound from "./pages/NotFound";
 import UserLayout from "./Layouts/UserLayout";
 import AuthLayout from "./Layouts/AuthLayout";
 
+import { supabase } from "./lib/supabase";
+
+
+const checkIsLogin = async () => {
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        throw redirect("/expense-tracker/login");
+    }
+
+    return null;
+};
+
+
 const router = createBrowserRouter([
     {
-        path: "expense-tracker",
         Component: UserLayout,
+        loader: checkIsLogin,
+
         children: [
             {
                 index: true,
-                element: <Home />
+                Component: Home
             },
             {
                 path: "budget",
-                element: < Budgeting />
+                Component: Budgeting
             },
         ],
     },
@@ -28,19 +47,24 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "login",
-                element: <Login />
+                Component: Login
             },
             {
                 path: "register",
-                element: <Register />
+                Component: Register
             },
         ],
     },
 
     {
-        path: "/*",
-        element: <NotFound />
+        path: "*",
+        Component: NotFound
     },
-]);
+
+],
+    {
+        basename: "/expense-tracker"
+    }
+);
 
 export default router;
