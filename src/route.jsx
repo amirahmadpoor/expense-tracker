@@ -18,7 +18,7 @@ const checkIsLogin = async () => {
     } = await supabase.auth.getUser();
 
     if (error || !user) {
-        throw redirect("/expense-tracker/login");
+        throw redirect("/login");
     }
 
     return null;
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 
         children: [
             {
-                index: true,
+                path: '/tracker',
                 Component: Home
             },
             {

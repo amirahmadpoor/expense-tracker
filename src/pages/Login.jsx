@@ -75,7 +75,7 @@ const Login = () => {
     toast.success('خوش آمدید!');
     setEmail('');
     setPassword('');
-    navigate('/');
+    navigate('/tracker');
   };
 
   return (

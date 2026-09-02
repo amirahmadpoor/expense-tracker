@@ -8,7 +8,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
     const [nameUser, setNameUser] = useState('');
 
     const subMenus = [
-        { id: 1, value: '/', title: 'خانه', icon: Home },
+        { id: 1, value: '/tracker', title: 'خانه', icon: Home },
         { id: 2, value: '/transactions', title: 'تراکنش‌ها', icon: Ticket },
         { id: 3, value: '/budget', title: 'بودجه', icon: Wallet },
         { id: 4, value: '/category', title: 'دسته‌ها', icon: LayoutGrid },
