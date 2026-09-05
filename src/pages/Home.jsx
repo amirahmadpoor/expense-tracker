@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import RecentTransactions from '../components/RecentTransactions/RecentTransactions'
 import Charts from '../components/Charts/Charts'
 import BoxBudget from '../components/BoxBudget/BoxBudget'
@@ -6,12 +6,16 @@ import AddCostForm from '../components/AddCostForm/AddCostForm'
 import { NotebookTabs, TrendingDown, TrendingUp, WalletMinimal } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getTransactionsController, deleteTransactionController } from '../controllers/transactions.controller'
+import Loading from '../components/Loading/Loading'
 
 const Home = () => {
     const [modal, setModal] = useState(false);
-    const [editingCost, setEditingCost] = useState(null);
+    const [editingTransaction, setEditingTransaction] = useState(null);
 
     const [transactions, setTransactions] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+
 
     const typeCost = [
         { value: 'expense', label: 'هزینه' },
@@ -30,8 +34,10 @@ const Home = () => {
 
     useEffect(() => {
         const getTransactions = async () => {
+            setLoading(true);
             const response = await getTransactionsController();
             setTransactions(response);
+            setLoading(false);
         }
 
         getTransactions();
@@ -75,7 +81,10 @@ const Home = () => {
                 <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
                     <div className="box__title-price flex flex-col">
                         <span className='box__title'>کل در آمد</span>
-                        <span className='box__price text-success'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
+                        {loading ?
+                            <Loading className="w-4 h-4 mt-2" /> :
+                            <span className='box__price text-success'>{Number(allIncome || 0).toLocaleString("fa-IR")} تومان</span>
+                        }
                     </div>
                     <div className='box__icon p-4 rounded-full text-success bg-success-light'><TrendingUp /></div>
                 </div>
@@ -83,7 +92,10 @@ const Home = () => {
                 <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
                     <div className="box__title-price flex flex-col">
                         <span className='box__title'>کل هزینه</span>
-                        <span className='box__price text-danger'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
+                        {loading ?
+                            <Loading className="w-4 h-4 mt-2" /> :
+                            <span className='box__price text-danger'>{Number(allBuy || 0).toLocaleString("fa-IR")} تومان</span>
+                        }
                     </div>
                     <div className='box__icon p-4 rounded-full text-danger bg-danger-light'><TrendingDown /></div>
                 </div>
@@ -91,14 +103,20 @@ const Home = () => {
                 <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
                     <div className="box__title-price flex flex-col">
                         <span className='box__title'>موجودی</span>
-                        <span className='box__price text-primary'>{Number(balance).toLocaleString('fa-IR')} تومان</span>
+                        {loading ?
+                            <Loading className="w-4 h-4 mt-2" /> :
+                            <span className='box__price text-primary'>{Number(balance).toLocaleString('fa-IR')} تومان</span>
+                        }
                     </div>
                     <div className='box__icon p-4 rounded-full bg-primary-light text-primary'><WalletMinimal /></div>
                 </div>
                 <div className="box card flex h-full w-full min-w-0 items-center justify-between rounded-sm bg-surface p-4">
                     <div className="box__title-price flex flex-col">
                         <span className='box__title'>تراکنش‌ها</span>
-                        <span className='box__price text-purple'>{transactions.length.toLocaleString('fa-IR')}</span>
+                        {loading ?
+                            <Loading className="w-4 h-4 mt-2" /> :
+                            <span className='box__price text-purple'>{transactions.length.toLocaleString('fa-IR')}</span>
+                        }
                     </div>
                     <div className='box__icon p-4 rounded-full bg-purple-light text-purple'><NotebookTabs /></div>
                 </div>
@@ -109,10 +127,9 @@ const Home = () => {
                     <AddCostForm
                         typeCost={typeCost}
                         categories={categories}
-                        transactions={transactions}
                         setTransactions={setTransactions}
-                        editingCost={editingCost}
-                        setEditingCost={setEditingCost}
+                        editingTransaction={editingTransaction}
+                        setEditingTransaction={setEditingTransaction}
                     />
 
                     <BoxBudget />
@@ -122,14 +139,15 @@ const Home = () => {
                     <RecentTransactions
                         transactions={transactions}
                         deleteTransaction={deleteTransaction}
-                        editingCost={editingCost}
-                        setEditingCost={setEditingCost}
+                        editingTransaction={editingTransaction}
+                        setEditingTransaction={setEditingTransaction}
                         typeCost={typeCost}
                         categories={categories}
+                        loading={loading}
                     />
 
                     <Charts
-                        costs={transactions}
+                        transactions={transactions}
                     />
                 </div>
             </div>
