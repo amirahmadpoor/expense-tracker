@@ -7,7 +7,6 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import UserLayout from "./Layouts/UserLayout";
 import AuthLayout from "./Layouts/AuthLayout";
-
 import { supabase } from "./lib/supabase";
 
 
@@ -36,52 +35,65 @@ const checkRoot = async () => {
     throw redirect("/login");
 };
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        loader: checkRoot,
-    },
-    
-    {
-        Component: UserLayout,
-        loader: checkIsLogin,
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            loader: checkRoot,
+        },
 
-        children: [
-            {
-                index: true,
-                Component: Home
-            },
-            {
-                path: 'tracker',
-                Component: Home
-            },
-            {
-                path: "budget",
-                Component: Budgeting
-            },
-        ],
-    },
+        {
+            Component: UserLayout,
+            loader: checkIsLogin,
 
-    {
-        Component: AuthLayout,
-        children: [
-            {
-                path: "login",
-                Component: Login
-            },
-            {
-                path: "register",
-                Component: Register
-            },
-        ],
-    },
+            children: [
+                {
+                    path: "tracker",
+                    Component: Home,
+                    handle: {
+                        title: "خانه"
+                    }
+                },
+                {
+                    path: "budget",
+                    Component: Budgeting,
+                    handle: {
+                        title: "بودجه‌بندی"
+                    }
+                },
+            ],
+        },
 
-    {
-        path: "*",
-        Component: NotFound
-    },
+        {
+            Component: AuthLayout,
 
-],
+            children: [
+                {
+                    path: "login",
+                    Component: Login,
+                    handle: {
+                        title: "ورود"
+                    }
+                },
+                {
+                    path: "register",
+                    Component: Register,
+                    handle: {
+                        title: "ثبت‌نام"
+                    }
+                },
+            ],
+        },
+
+        {
+            path: "*",
+            Component: NotFound,
+            handle: {
+                title: "صفحه پیدا نشد"
+            }
+        },
+    ],
+
     {
         basename: "/expense-tracker"
     }

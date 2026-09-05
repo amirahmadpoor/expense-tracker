@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { getProfileService } from '../api/profile.api'
+import { getProfileService, signOut } from '../api/profile.api'
 
 const getProfileController = async () => {
     try {
@@ -16,4 +16,8 @@ const getProfileController = async () => {
     }
 }
 
-export { getProfileController };
+const signOutController = async () => {
+    return await signOut();
+}
+
+export { getProfileController,signOutController };

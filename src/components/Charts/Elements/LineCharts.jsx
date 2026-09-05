@@ -2,7 +2,7 @@ import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
 import { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-function LineCharts({ costs }) {
+function LineCharts({ transactions }) {
     const [page, setPage] = useState(0);
 
     const chartData = useMemo(() => {
@@ -24,7 +24,7 @@ function LineCharts({ costs }) {
         const toEnglishNumber = str =>
             str.replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
 
-        costs.filter(cost => cost.type === 'expense')
+        transactions.filter(cost => cost.type === 'expense')
             .forEach(expense => {
                 const expenseMonth = Number(
                     toEnglishNumber(new Date(expense.date).toLocaleDateString('fa-IR').split('/')[1])
@@ -34,7 +34,7 @@ function LineCharts({ costs }) {
             })
 
         return months.slice(page * 6, page * 6 + 6);
-    }, [costs, page]);
+    }, [transactions, page]);
 
     return (
         <div className="analytic__line-chart flex w-full min-w-0 flex-col gap-4 rounded-sm border-field bg-surface p-3 shadow-card">

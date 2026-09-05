@@ -15,5 +15,20 @@ const getProfileService = async () => {
     }
 }
 
+const signOut = async () => {
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const { error } = await supabase.auth.signOut(user);
 
-export { getProfileService };
+        if (error) {
+            throw error;
+        }
+
+        return true;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+export { getProfileService, signOut };

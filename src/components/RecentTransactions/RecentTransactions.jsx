@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
+import Loading from '../Loading/Loading';
 
 function RecentTransactions({
     transactions,
     deleteTransaction,
-    editingCost,
-    setEditingCost,
+    setEditingTransaction,
     typeCost,
-    categories
+    categories,
+    loading
 }) {
 
     const FILTER_ALL = 'all';
@@ -21,8 +22,6 @@ function RecentTransactions({
     const [showType, setShowType] = useState(false);
     const [showCategory, setShowCategory] = useState(false);
     const [showSort, setShowSort] = useState(false);
-
-    const [loading, setLoading] = useState(false);
 
     const sorts = [
         { value: 'newest', label: 'جدیدترین' },
@@ -64,11 +63,13 @@ function RecentTransactions({
         return () => clearTimeout(handleDebounce);
     }, [search]);
 
-    const costsFiltered = useMemo(() => {
+    const transactionsFiltered = useMemo(() => {
+
         const result = transactions
             .filter(cost => cost.title.toLowerCase().includes(debouncedSearch.toLowerCase().trim()))
             .filter(cost => typeField === FILTER_ALL || cost.type === typeField)
             .filter(cost => categoryField === FILTER_ALL || cost.category === categoryField);
+
         switch (sortField) {
             case 'highest':
                 result.sort((a, b) => Number(b.amount) - Number(a.amount));
@@ -139,6 +140,7 @@ function RecentTransactions({
                         ))}
                     </ul>
                 </div>
+
                 <div className="recent-transactions__category max-w-[200px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
                     <div
                         className='cursor-pointer'
@@ -201,17 +203,22 @@ function RecentTransactions({
                     تراکنش‌های اخیر
                 </span>
 
-                {costsFiltered.length > 0
-                    ? costsFiltered.map(cost => (
-                        <BoxTransaction
-                            key={cost.id}
-                            {...cost}
-                            categories={categories}
-                            deleteTransaction={deleteTransaction}
-                            setEditingCost={setEditingCost}
-                        />
-                    ))
-                    : <NotTransaction />
+                {loading ? <Loading className="mx-auto mt-20 w-10 h-10"/>
+                    :
+                    transactionsFiltered.length > 0
+                        ? transactionsFiltered.map(transaction => (
+                            <BoxTransaction
+                                key={transaction.id}
+                                {...transaction}
+                                categories={categories}
+                                deleteTransaction={deleteTransaction}
+                                setEditingTransaction={setEditingTransaction}
+                            />
+                        ))
+                        : <NotTransaction />
+                }
+
+                {
                 }
             </div>
         </div>

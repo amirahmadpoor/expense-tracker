@@ -1,9 +1,12 @@
-import React from 'react'
-import { Outlet, Routes } from 'react-router'
+import { Outlet } from 'react-router'
+import PageTitle from '../components/PageTitle/PageTitle'
 
 const AuthLayout = () => {
     return (
-        <Outlet />
+        <>
+            <PageTitle />
+            <Outlet />
+        </>
     )
 }
 

@@ -5,6 +5,7 @@ import { Calendar } from "react-multi-date-picker"
 import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
 import { getTransactionsController, insertTransactionController, updateTransactionController } from '../../controllers/transactions.controller';
+import Loading from '../Loading/Loading';
 
 function AddCostForm({
     typeCost,
@@ -53,7 +54,6 @@ function AddCostForm({
             }
 
             await insertTransactionController(newCost);
-
             await setTransactions(await getTransactionsController());
         } catch (err) {
             console.error(err);
@@ -73,7 +73,6 @@ function AddCostForm({
                 category,
                 date
             }
-
 
             await updateTransactionController(editingCost.id, editCost);
             await setTransactions(await getTransactionsController());
@@ -222,7 +221,7 @@ function AddCostForm({
                 >
                     {loading ? (
                         <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <Loading className="w-5 h-5"/>
                             <span>{editingCost ? 'در حال ویرایش...' : 'در حال افزودن...'}</span>
                         </>
                     ) : (

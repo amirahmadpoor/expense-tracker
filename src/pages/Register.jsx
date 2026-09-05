@@ -180,7 +180,7 @@ const Register = () => {
                 className="w-full bg-gradient-to-r from-success to-success/80 hover:from-success/90 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 transform hover:-translate-y-0.5 transition-all mt-6">
                 {loading ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <Loading className="w-5 h-5"/>
                     <span>در حال ثبت نام...</span>
                   </>
                 ) : (

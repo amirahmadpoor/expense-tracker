@@ -1,8 +1,6 @@
 // import { format } from 'date-fns-jalali';
-import { Edit3, Link, Trash, TrendingDown, TrendingUp } from 'lucide-react'
-import { Route, Routes, useParams } from 'react-router';
+import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
 import Swal from 'sweetalert2'
-import Login from '../../pages/Login';
 
 function BoxTransaction({
     id,
@@ -11,9 +9,8 @@ function BoxTransaction({
     type,
     category,
     date,
-    categories,
     deleteTransaction,
-    setEditingCost
+    setEditingTransaction
 }) {
     const categoryLabel = {
         food: 'غذا',
@@ -73,7 +70,7 @@ function BoxTransaction({
 
                     <button type="button" className="box__edit text-primary cursor-pointer"
                         onClick={() => {
-                            setEditingCost({ id, title, amount, type, category, date });
+                            setEditingTransaction({ id, title, amount, type, category, date });
                         }}
                     >
                         <Edit3 className='w-[15px] md:w-[20px]' />

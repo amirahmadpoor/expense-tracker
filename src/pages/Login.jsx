@@ -5,6 +5,7 @@ import { Link, Route, Routes, useNavigate, useParams } from 'react-router';
 import Register from './Register';
 import { loginValidation } from '../validations/auth.validation';
 import { supabase } from '../lib/supabase';
+import Loading from '../components/Loading/Loading';
 
 const InputField = ({ icon: Icon, type = 'text', placeholder, value, onChange, onToggle, showValue, disabled }) => (
   <div className="relative group">
@@ -129,7 +130,7 @@ const Login = () => {
               className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70 transform hover:-translate-y-0.5 transition-all">
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <Loading className="w-5 h-5"/>
                   <span>در حال ورود...</span>
                 </>
               ) : (

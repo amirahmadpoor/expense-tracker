@@ -1,10 +1,11 @@
-import { Edit2, Home, LayoutGrid, LogOut, Settings, Ticket, User, Wallet } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router'
-import { getProfileController } from '../../controllers/profile.controller';
+import { Home, LayoutGrid, LogOut, Settings, Ticket, User, Wallet } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router'
+import { getProfileController, signOutController } from '../../controllers/profile.controller';
 
 const Sidebar = ({ openMenu, setOpenMenu }) => {
     const activeTab = useLocation();
+    const navigate = useNavigate();
     const [nameUser, setNameUser] = useState('');
 
     const subMenus = [
@@ -28,6 +29,19 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
                 <span className='item__title'>{title}</span>
             </Link>
         )
+    }
+
+    const handleSignOutUser = async () => {
+        try {
+            const response = await signOutController();
+            console.log(response);
+
+            if (response) {
+                navigate('login', { replace: true });
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     useEffect(() => {
@@ -56,7 +70,10 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
                     </div>
                 </div>
 
-                <button>
+                <button
+                    className='cursor-pointer'
+                    onClick={handleSignOutUser}
+                >
                     <LogOut className='text-danger scale-x-[-1]' />
                 </button>
             </div>
