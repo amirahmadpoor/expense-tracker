@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { TransactionsContext } from '../../pages/Home';
+import { useContext, useEffect, useState } from 'react'
 import RecentTransactions from '../RecentTransactions/RecentTransactions';
 import DatePickerModule from "react-multi-date-picker";
 import { Calendar } from "react-multi-date-picker"
@@ -7,14 +8,8 @@ import persian_fa from "react-date-object/locales/persian_fa"
 import { getTransactionsController, insertTransactionController, updateTransactionController } from '../../controllers/transactions.controller';
 import Loading from '../Loading/Loading';
 
-function AddCostForm({
-    typeCost,
-    categories,
-    transactions,
-    setTransactions,
-    editingCost,
-    setEditingCost
-}) {
+function AddCostForm() {
+    const { typeCost, categories, setTransactions, editingTransaction, setEditingTransaction } = useContext(TransactionsContext);
 
     const DatePicker = DatePickerModule.default;
     const [title, setTitle] = useState('');
@@ -74,26 +69,26 @@ function AddCostForm({
                 date
             }
 
-            await updateTransactionController(editingCost.id, editCost);
+            await updateTransactionController(editingTransaction.id, editCost);
             await setTransactions(await getTransactionsController());
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
             resetForm();
-            setEditingCost(null);
+            setEditingTransaction(null);
         }
     }
 
     useEffect(() => {
-        if (editingCost) {
-            setTitle(editingCost.title);
-            setAmount(editingCost.amount);
-            setType(editingCost.type);
-            setCategory(editingCost.category);
-            setDate(new Date(editingCost.date));
+        if (editingTransaction) {
+            setTitle(editingTransaction.title);
+            setAmount(editingTransaction.amount);
+            setType(editingTransaction.type);
+            setCategory(editingTransaction.category);
+            setDate(new Date(editingTransaction.date));
         }
-    }, [editingCost]);
+    }, [editingTransaction]);
 
 
     return (
@@ -104,7 +99,7 @@ function AddCostForm({
             <form id='form' className='flex flex-col gap-2 mt-8'
                 onSubmit={(e) => {
                     e.preventDefault();
-                    !editingCost ? handleAddCost() : handleEditCost();
+                    !editingTransaction ? handleAddCost() : handleEditCost();
                 }}
             >
                 <div className="input flex flex-col gap-2">
@@ -221,11 +216,11 @@ function AddCostForm({
                 >
                     {loading ? (
                         <>
-                            <Loading className="w-5 h-5"/>
-                            <span>{editingCost ? 'در حال ویرایش...' : 'در حال افزودن...'}</span>
+                            <Loading className="w-5 h-5" />
+                            <span>{editingTransaction ? 'در حال ویرایش...' : 'در حال افزودن...'}</span>
                         </>
                     ) : (
-                        editingCost ? 'ویرایش' : 'افزودن'
+                        editingTransaction ? 'ویرایش' : 'افزودن'
                     )}
                 </button>
             </form >

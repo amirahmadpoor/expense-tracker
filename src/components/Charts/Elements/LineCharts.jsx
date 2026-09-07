@@ -1,8 +1,11 @@
+import { TransactionsContext } from '../../../pages/Home';
 import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-function LineCharts({ transactions }) {
+function LineCharts() {
+
+    const { transactions } = useContext(TransactionsContext);
     const [page, setPage] = useState(0);
 
     const chartData = useMemo(() => {

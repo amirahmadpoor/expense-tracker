@@ -1,5 +1,6 @@
-// import { format } from 'date-fns-jalali';
+import { TransactionsContext } from '../../pages/Home';
 import { Edit3, Trash, TrendingDown, TrendingUp } from 'lucide-react'
+import { useContext } from 'react';
 import Swal from 'sweetalert2'
 
 function BoxTransaction({
@@ -9,9 +10,10 @@ function BoxTransaction({
     type,
     category,
     date,
-    deleteTransaction,
-    setEditingTransaction
 }) {
+
+    const { deleteTransaction, setEditingTransaction } = useContext(TransactionsContext);
+
     const categoryLabel = {
         food: 'غذا',
         transport: 'حمل و نقل',

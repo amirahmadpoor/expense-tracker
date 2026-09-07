@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import RecentTransactions from '../components/RecentTransactions/RecentTransactions'
 import Charts from '../components/Charts/Charts'
 import BoxBudget from '../components/BoxBudget/BoxBudget'
 import AddCostForm from '../components/AddCostForm/AddCostForm'
 import { NotebookTabs, TrendingDown, TrendingUp, WalletMinimal } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { getTransactionsController, deleteTransactionController } from '../controllers/transactions.controller'
 import Loading from '../components/Loading/Loading'
 
+export const TransactionsContext = createContext(null);
 const Home = () => {
-    const [modal, setModal] = useState(false);
+
+
     const [editingTransaction, setEditingTransaction] = useState(null);
 
     const [transactions, setTransactions] = useState([]);
@@ -57,14 +58,6 @@ const Home = () => {
 
     const balance = allIncome - allBuy;
 
-
-    // const showSuccessToast = (text) => {
-    //     toast.success(text);
-    // }
-
-    // const showErrorToast = (text) => {
-    //     toast.error(text);
-    // }
 
     const deleteTransaction = async (id) => {
         const response = await deleteTransactionController(id);
@@ -123,33 +116,31 @@ const Home = () => {
             </div>
 
             <div className='col-span-4 grid gap-2 lg:grid-cols-4 grid-cols-1'>
-                <div className="main-right flex min-w-0 flex-col gap-2">
-                    <AddCostForm
-                        typeCost={typeCost}
-                        categories={categories}
-                        setTransactions={setTransactions}
-                        editingTransaction={editingTransaction}
-                        setEditingTransaction={setEditingTransaction}
-                    />
+                <TransactionsContext
+                    value={{
+                        typeCost,
+                        categories,
+                        setTransactions,
+                        editingTransaction,
+                        setEditingTransaction,
+                        transactions,
+                        deleteTransaction,
+                        loading,
+                    }}
+                >
 
-                    <BoxBudget />
-                </div>
+                    <div className="main-right flex min-w-0 flex-col gap-2">
+                        <AddCostForm />
 
-                <div className="main-left flex flex-col gap-2 md:col-span-3 col-span-1">
-                    <RecentTransactions
-                        transactions={transactions}
-                        deleteTransaction={deleteTransaction}
-                        editingTransaction={editingTransaction}
-                        setEditingTransaction={setEditingTransaction}
-                        typeCost={typeCost}
-                        categories={categories}
-                        loading={loading}
-                    />
+                        <BoxBudget />
+                    </div>
 
-                    <Charts
-                        transactions={transactions}
-                    />
-                </div>
+                    <div className="main-left flex flex-col gap-2 md:col-span-3 col-span-1">
+                        <RecentTransactions />
+
+                        <Charts />
+                    </div>
+                </TransactionsContext>
             </div>
         </div>
     )

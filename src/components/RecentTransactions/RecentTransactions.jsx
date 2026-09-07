@@ -1,16 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { TransactionsContext } from '../../pages/Home';
+import { useContext, useEffect, useMemo, useState } from 'react'
 import NotTransaction from '../NotTransaction/NotTransaction'
 import BoxTransaction from '../BoxTransaction/BoxTransaction'
 import Loading from '../Loading/Loading';
 
-function RecentTransactions({
-    transactions,
-    deleteTransaction,
-    setEditingTransaction,
-    typeCost,
-    categories,
-    loading
-}) {
+function RecentTransactions() {
+    const { transactions,
+        deleteTransaction,
+        // editingTransaction,
+        setEditingTransaction,
+        typeCost,
+        categories,
+        loading } = useContext(TransactionsContext);
 
     const FILTER_ALL = 'all';
     const [search, setSearch] = useState('');
@@ -203,16 +204,13 @@ function RecentTransactions({
                     تراکنش‌های اخیر
                 </span>
 
-                {loading ? <Loading className="mx-auto mt-20 w-10 h-10"/>
+                {loading ? <Loading className="mx-auto mt-20 w-10 h-10" />
                     :
                     transactionsFiltered.length > 0
                         ? transactionsFiltered.map(transaction => (
                             <BoxTransaction
                                 key={transaction.id}
                                 {...transaction}
-                                categories={categories}
-                                deleteTransaction={deleteTransaction}
-                                setEditingTransaction={setEditingTransaction}
                             />
                         ))
                         : <NotTransaction />
