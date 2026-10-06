@@ -7,6 +7,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
     const activeTab = useLocation();
     const navigate = useNavigate();
     const [nameUser, setNameUser] = useState('');
+    const [emailUser, setEmailUser] = useState('');
 
     const subMenus = [
         { id: 1, value: '/tracker', title: 'خانه', icon: Home },
@@ -50,6 +51,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
 
             if (response) {
                 setNameUser(response.name);
+                setEmailUser(response.email);
             }
         }
 
@@ -66,7 +68,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
                     </div>
                     <div className="sidebar__info-user flex flex-col text-sm text-text-secondary">
                         <span className="name-user">{nameUser}</span>
-                        <span className="email-user">amir@gmail.com</span>
+                        <span className="email-user">{emailUser}</span>
                     </div>
                 </div>
 

@@ -1,33 +1,14 @@
-import { supabase } from '../lib/supabase';
+import { clearCurrentUser } from '../lib/indexedDB';
+import { getMeService } from './auth.api';
 
 const getProfileService = async () => {
-    try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const { data: profile, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user?.id)
-            .single();
-
-        return { profile, error };
-    } catch (err) {
-        console.error(err);
-    }
+    const profile = await getMeService();
+    return { profile, error: profile ? null : new Error('کاربر وارد نشده است.') };
 }
 
 const signOut = async () => {
-    try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const { error } = await supabase.auth.signOut(user);
-
-        if (error) {
-            throw error;
-        }
-
-        return true;
-    } catch (err) {
-        console.error(err);
-    }
+    clearCurrentUser();
+    return true;
 }
 
 

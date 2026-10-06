@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, User, UserPlus, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Link, Route, Routes, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { registerValidation } from '../validations/auth.validation';
-import Login from './Login';
-import { supabase } from '../lib/supabase';
+import { registerService } from '../api/auth.api';
+import Loading from '../components/Loading/Loading';
 
 const InputField = ({ label, icon: Icon, type = 'text', placeholder, value, onChange, onToggle, showValue, disabled }) => (
   <div>
@@ -60,23 +60,13 @@ const Register = () => {
     if (!validate()) return;
 
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name: fullName,
-        },
-      },
-    });
-
-    if (error) {
+    try {
+      await registerService({ fullName, email, password });
+    } catch (error) {
       console.error(error.message);
       setLoading(false);
       return toast.error('ثبت نام نا موفق!');
     }
-
-    console.log(data);
 
     setLoading(false);
     toast.success('ثبت نام موفق!');

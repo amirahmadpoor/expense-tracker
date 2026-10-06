@@ -1,4 +1,4 @@
-import { createBrowserRouter, redirect } from "react-router";
+import { createBrowserRouter, Link, redirect } from "react-router";
 
 import Home from "./pages/Home";
 import Budgeting from "./pages/Budgeting";
@@ -7,16 +7,13 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import UserLayout from "./Layouts/UserLayout";
 import AuthLayout from "./Layouts/AuthLayout";
-import { supabase } from "./lib/supabase";
+import { getMeService } from './api/auth.api';
 
 
 const checkIsLogin = async () => {
-    const {
-        data: { user },
-        error
-    } = await supabase.auth.getUser();
+    const user = await getMeService();
 
-    if (error || !user) {
+    if (!user) {
         throw redirect("/login");
     }
 
@@ -24,9 +21,7 @@ const checkIsLogin = async () => {
 };
 
 const checkRoot = async () => {
-    const {
-        data: { user }
-    } = await supabase.auth.getUser();
+    const user = await getMeService();
 
     if (user) {
         throw redirect("/tracker");
@@ -51,14 +46,15 @@ const router = createBrowserRouter(
                     path: "tracker",
                     Component: Home,
                     handle: {
-                        title: "خانه"
+                        title: "خانه",
+                        // breadcrumb: (match) => <Link to={match.pathname}>خانه</Link>,
                     }
                 },
                 {
                     path: "budget",
                     Component: Budgeting,
                     handle: {
-                        title: "بودجه‌بندی"
+                        title: "بودجه‌بندی",
                     }
                 },
             ],

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Link, Route, Routes, useNavigate, useParams } from 'react-router';
-import Register from './Register';
+import { Link, useNavigate } from 'react-router';
 import { loginValidation } from '../validations/auth.validation';
-import { supabase } from '../lib/supabase';
+import { loginService } from '../api/auth.api';
 import Loading from '../components/Loading/Loading';
 
 const InputField = ({ icon: Icon, type = 'text', placeholder, value, onChange, onToggle, showValue, disabled }) => (
@@ -57,18 +56,16 @@ const Login = () => {
 
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    try {
+      await loginService({
       email,
       password,
-    });
-
-    if (error) {
+      });
+    } catch (error) {
       console.error(error.message);
       setLoading(false);
       return toast.error('ورود نا موفق!');
     }
-
-    console.log(data);
 
 
     setLoading(false);

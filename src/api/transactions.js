@@ -1,22 +1,23 @@
-import { supabase } from "../lib/supabase";
+import {
+    deleteRecord,
+    getAllByIndex,
+    getCurrentUser,
+    putRecord,
+} from '../lib/indexedDB';
+
+const requireCurrentUser = async () => {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        throw new Error('کاربر وارد نشده است.');
+    }
+
+    return user;
+};
 
 const getTransactionsService = async () => {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-        throw userError;
-    }
-
-    const { data, error } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', user.id);
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    const user = await requireCurrentUser();
+    return getAllByIndex('transactions', 'userId', user.id);
 };
 
 
@@ -27,30 +28,19 @@ const insertTransactionService = async ({
     category,
     date
 }) => {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const user = await requireCurrentUser();
+    const transaction = {
+        id: crypto.randomUUID(),
+        userId: user.id,
+        title,
+        amount,
+        type,
+        category,
+        date,
+    };
 
-    if (userError) {
-        throw userError;
-    }
-
-    const { data, error } = await supabase
-        .from('transactions')
-        .insert({
-            user_id: user.id,
-            title,
-            amount,
-            type,
-            category,
-            date
-        })
-        .select()
-        .single();
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    await putRecord('transactions', transaction);
+    return transaction;
 };
 
 
@@ -64,54 +54,32 @@ const updateTransactionService = async (
         date
     }
 ) => {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const user = await requireCurrentUser();
+    const transaction = await getTransactionForUser(id, user.id);
 
-    if (userError) {
-        throw userError;
-    }
-
-    const { data, error } = await supabase
-        .from('transactions')
-        .update({
-            title,
-            amount,
-            type,
-            category,
-            date
-        })
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    Object.assign(transaction, { title, amount, type, category, date });
+    await putRecord('transactions', transaction);
+    return transaction;
 };
 
 
 const deleteTransactionService = async (id) => {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const user = await requireCurrentUser();
+    const transaction = await getTransactionForUser(id, user.id);
 
-    if (userError) {
-        throw userError;
+    await deleteRecord('transactions', id);
+    return transaction;
+};
+
+const getTransactionForUser = async (id, userId) => {
+    const transactions = await getAllByIndex('transactions', 'userId', userId);
+    const transaction = transactions.find((item) => item.id === id);
+
+    if (!transaction) {
+        throw new Error('تراکنش پیدا نشد.');
     }
 
-    const { data, error } = await supabase
-        .from('transactions')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    return transaction;
 };
 
 

@@ -1,11 +1,15 @@
-import { Banknote, Book, Calendar, Car, Filter, Gamepad, Hamburger, Hospital, LayoutGrid, MoreHorizontal, NotebookTabs, Plus, Receipt, SortAsc, SortDesc, TrendingDown, Wallet, WalletMinimal } from 'lucide-react'
-import React, { useState } from 'react'
+import { Book, Calendar, Car, Filter, Gamepad, Hamburger, Hospital, LayoutGrid, MoreHorizontal, NotebookTabs, Plus, Receipt, SortAsc, SortDesc, TrendingDown, Wallet, WalletMinimal, X } from 'lucide-react'
+import { useState } from 'react'
 import SummaryCard from '../components/SummaryCard/SummaryCard'
 import CategoryRow from '../components/CategoryRow/CategoryRow'
+import { useOutletContext } from 'react-router'
 
 const Budgeting = () => {
   const [sortFiled, setSortFiled] = useState('highest');
   const [showSort, setShowSort] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const { showOverlay, setShowOverlay } = useOutletContext();
+
   const sorts = [
     { value: 'highest', label: 'بیشترین مبلغ' },
     { value: 'lowest', label: 'کمترین مبلغ' },
@@ -63,6 +67,10 @@ const Budgeting = () => {
     },
   ];
 
+  const toggleFilterBox = () => {
+    setShowFilter(!showFilter);
+    setShowOverlay(!showOverlay);
+  }
   return (
     <div className='container mx-auto mt-5'>
       <header className=' flex justify-between items-center'>
@@ -114,9 +122,10 @@ const Budgeting = () => {
       <div className='flex items-center justify-between mt-5'>
         <div
           className='max-w-[260px] w-full flex items-center gap-2'
-          onClick={() => setShowSort(!showSort)}
         >
-          <div className='w-full center-content btn-filter relative'>
+          <div className='w-full center-content btn-filter relative'
+            onClick={() => setShowSort(!showSort)}
+          >
             {sorts.find(sort => sort.value === sortFiled)?.label}
             <SortDesc />
             <div className={`w-full absolute translate-y-[80%] p-1 bg-surface border border-border rounded-sm text-sm transition-all duration-200 ${!showSort && 'invisible opacity-0'}`}>
@@ -130,47 +139,54 @@ const Budgeting = () => {
                 </div>)}
             </div>
           </div>
-          <div className='center-content btn-filter relative'>
+          <div className='center-content btn-filter relative'
+            onClick={toggleFilterBox}
+          >
             فیلتر
             <Filter />
-            <div className='absolute top-11 right-0 w-[400px] flex flex-col gap-4 bg-surface rounded-sm border border-border p-2 hidden'>
-              <span className='font-bold text-lg border-b border-border pb-2'>فیلترها</span>
+          </div>
+          <div className={`absolute m-auto left-0 right-0 w-[400px] flex flex-col gap-4 bg-surface rounded-sm border border-border p-3 z-50 transition-all duration-200 ${!showFilter && 'invisible opacity-0'}`}>
+            <header className='flex items-center justify-between border-b border-border pb-2'>
+              <span className='font-bold text-lg'>فیلترها</span>
+              <X className='cursor-pointer'
+                onClick={toggleFilterBox}
+              />
+            </header>
 
-              <div className='p-2 border-b border-border flex flex-col gap-2'>
-                <span>بودجه</span>
-                <div className='flex flex-col mt-2'>
-                  <div className='flex items-center justify-between'>
-                    <span>0</span>
-                    <span>100000000</span>
-                  </div>
-                  <input type="range" name="" id=""/>
+            <div className='p-2 border-b border-border flex flex-col gap-2'>
+              <span>بودجه</span>
+              <div className='flex flex-col mt-2'>
+                <div className='flex items-center justify-between'>
+                  <span>0</span>
+                  <span>100000000</span>
                 </div>
+                <input type="range" name="" id="" />
               </div>
-
-              <div className='px-2'>
-                <span>وضعیت</span>
-                <ul className='text-sm flex flex-col gap-2 p-2'>
-                  <div className='flex items-center justify-between'>
-                    <li>عادی</li>
-                    <input type="checkbox" name="" id="" />
-                  </div>
-                  <div className='flex items-center justify-between'>
-                    <li>در حال اتمام</li>
-                    <input type="checkbox" name="" id="" />
-                  </div>
-                  <div className='flex items-center justify-between'>
-                    <li>تمام شده</li>
-                    <input type="checkbox" name="" id="" />
-                  </div>
-                  <div className='flex items-center justify-between'>
-                    <li>تعیین نشده</li>
-                    <input type="checkbox" name="" id="" />
-                  </div>
-                </ul>
-              </div>
-
-
             </div>
+
+            <div className='px-2'>
+              <span>وضعیت</span>
+              <ul className='text-sm flex flex-col gap-2 p-2'>
+                <div className='flex items-center justify-between'>
+                  <li>عادی</li>
+                  <input type="checkbox" name="" id="" />
+                </div>
+                <div className='flex items-center justify-between'>
+                  <li>در حال اتمام</li>
+                  <input type="checkbox" name="" id="" />
+                </div>
+                <div className='flex items-center justify-between'>
+                  <li>تمام شده</li>
+                  <input type="checkbox" name="" id="" />
+                </div>
+                <div className='flex items-center justify-between'>
+                  <li>تعیین نشده</li>
+                  <input type="checkbox" name="" id="" />
+                </div>
+              </ul>
+            </div>
+
+
           </div>
         </div>
         <div className='center-content gap-2 bg-primary text-white p-2 rounded-sm cursor-pointer transition-all duration-200 hover:bg-primary-light'>

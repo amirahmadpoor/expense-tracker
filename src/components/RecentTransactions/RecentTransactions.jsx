@@ -98,7 +98,7 @@ function RecentTransactions() {
         <div className='recent-transactions card md:min-h-[528px] bg-surface w-full h-full rounded-sm pt-5 px-3 overflow-hidden'>
 
             <header className="recent-transactions__header flex items-center gap-2 border-b pb-3 border-border text-sm">
-                <div className="recent-transactions__search max-w-[300px] w-full bg-surface-3 rounded-sm border-field p-1">
+                <div className="recent-transactions__search max-w-[300px] w-full bg-surface-2 rounded-sm border-field p-2 transition-colors">
                     <input
                         type="text"
                         className='outline-none w-full'
@@ -107,16 +107,17 @@ function RecentTransactions() {
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
                 </div>
-                <div className="recent-transactions__type max-w-[150px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-                    <div
-                        className='cursor-pointer'
-                        onClick={toggleTypeField}
-                    >
+                <div
+                    className="recent-transactions__type max-w-[150px] w-full bg-surface-2 rounded-sm border-field p-2 relative cursor-pointer"
+                    onClick={toggleTypeField}
+                >
+                    <span>
                         {typeField === FILTER_ALL
                             ? 'همه تراکنش‌ها'
                             : typeCost.find(item => item.value === typeField)?.label}
-                    </div>
-                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showType ? '' : 'hidden'}`}>
+                    </span>
+
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-3 bg-surface z-10 transition-all duration-120 ${showType ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'}`}>
                         <li
                             className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
@@ -142,16 +143,17 @@ function RecentTransactions() {
                     </ul>
                 </div>
 
-                <div className="recent-transactions__category max-w-[200px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-                    <div
-                        className='cursor-pointer'
-                        onClick={toggleCategoryField}
-                    >
+                <div
+                    className="recent-transactions__category max-w-[200px] w-full bg-surface-2 rounded-sm border-field p-2 relative cursor-pointer"
+                    onClick={toggleCategoryField}
+                >
+                    <span>
                         {categoryField === FILTER_ALL
                             ? 'همه دسته‌ها'
                             : categories.find(item => item.value === categoryField)?.label}
-                    </div>
-                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showCategory ? '' : 'hidden'}`}>
+                    </span>
+
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-3 bg-surface z-10 transition-all duration-120 ${showCategory ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'}`}>
                         <li
                             className='cursor-pointer hover:bg-surface-3 rounded-sm p-1'
                             onClick={() => {
@@ -175,14 +177,14 @@ function RecentTransactions() {
                         ))}
                     </ul>
                 </div>
-                <div className="recent-transactions__sorting max-w-[120px] w-full bg-surface-3 rounded-sm border-field p-1 relative">
-                    <div
-                        className='cursor-pointer'
-                        onClick={toggleSortField}
-                    >
+                <div
+                    className="recent-transactions__sorting max-w-[120px] w-full bg-surface-2 rounded-sm border-field p-2 relative cursor-pointer"
+                    onClick={toggleSortField}
+                >
+                    <span>
                         {sorts.find(sort => sort.value === sortField)?.label}
-                    </div>
-                    <ul className={`w-full border-field p-1 absolute right-0 mt-1 bg-surface z-10 ${showSort ? '' : 'hidden'}`}>
+                    </span>
+                    <ul className={`w-full border-field p-1 absolute right-0 mt-3 bg-surface z-10 transition-all duration-120 ${showSort ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'}`}>
                         {sorts.map(sort => (
                             <li
                                 key={sort.value}

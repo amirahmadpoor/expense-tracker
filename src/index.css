@@ -91,6 +91,7 @@
 
     --scrollbar-thumb: #cbd5e1;
     --border: #e2e8f0;
+    --border-focus: #afb0b3;
 
     --text-primary: #0f172a;
     --text-secondary: #64748b;
@@ -169,6 +170,10 @@
 .border-field {
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+}
+
+.border-field:has(:focus) {
+    border-color: var(--border-focus);
 }
 
 .btn-header {

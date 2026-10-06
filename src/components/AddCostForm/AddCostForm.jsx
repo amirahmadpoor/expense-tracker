@@ -104,41 +104,52 @@ function AddCostForm() {
             >
                 <div className="input flex flex-col gap-2">
                     <label htmlFor="title" className='font-bold'>عنوان</label>
-                    <input
-                        type="text"
-                        id='title'
-                        required
-                        value={title}
-                        className='h-10 border-field p-2 outline-0 focus:border'
-                        placeholder='عنوان تراکنش'
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
+
+                    <div className='border-field overflow-hidden p-2'>
+                        <input
+                            type="text"
+                            id='title'
+                            required
+                            value={title}
+                            className='w-100 h-10 outline-0'
+                            placeholder='عنوان تراکنش'
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <div className="input flex flex-col gap-2">
                     <label htmlFor="amount" className='font-bold'>مبلغ</label>
-                    <input
-                        type="number"
-                        id='amount'
-                        required
-                        value={amount}
-                        className='h-10 border-field p-2 outline-0 focus:border'
-                        placeholder='مبلغ'
-                        onChange={(e) => setAmount(e.target.value)}
-                    />
+
+                    <div className='border-field'>
+                        <input
+                            type="number"
+                            id='amount'
+                            required
+                            value={amount}
+                            className='w-100 h-10 p-2 outline-0'
+                            placeholder='مبلغ'
+                            onChange={(e) => setAmount(e.target.value)}
+                        />
+                    </div>
+
                 </div>
                 <div className="input flex flex-col gap-2 relative">
                     <label htmlFor="type" className='font-bold'>نوع</label>
-                    <input
-                        id='type'
-                        readOnly
-                        value={typeCost.find(item => item.value === type)?.label || ''}
-                        className='h-10 border-field p-2 outline-0 focus:border'
-                        placeholder='انتخاب تراکنش'
-                        onClick={() => {
-                            setOpenType(!openType);
-                            setOpenCategories(false);
-                        }}
-                    />
+
+                    <div className='border-field'>
+                        <input
+                            id='type'
+                            readOnly
+                            value={typeCost.find(item => item.value === type)?.label || ''}
+                            className='w-100 h-10 p-2 outline-0'
+                            placeholder='انتخاب تراکنش'
+                            onClick={() => {
+                                setOpenType(!openType);
+                                setOpenCategories(false);
+                            }}
+                        />
+                    </div>
+
                     {openType &&
                         <ul className='border-field p-1 absolute -bottom-25 bg-surface w-full z-10'>
                             {typeCost.map(type =>
@@ -161,17 +172,22 @@ function AddCostForm() {
                     ?
                     <div className="input flex flex-col gap-2 relative">
                         <label htmlFor="category" className='font-bold'>دسته بندی</label>
-                        <input
-                            id='category'
-                            readOnly
-                            className='h-10 border-field p-2 outline-0 focus:border'
-                            placeholder='انتخاب دسته'
-                            value={categories.find(item => item.value === category)?.label || ''}
-                            onClick={() => {
-                                setOpenCategories(!openCategories);
-                                setOpenType(false);
-                            }}
-                        />
+
+
+                        <div className='border-field'>
+                            <input
+                                id='category'
+                                readOnly
+                                className='h-10 p-2 outline-0'
+                                placeholder='انتخاب دسته'
+                                value={categories.find(item => item.value === category)?.label || ''}
+                                onClick={() => {
+                                    setOpenCategories(!openCategories);
+                                    setOpenType(false);
+                                }}
+                            />
+                        </div>
+
                         {openCategories &&
                             <ul className='border-field p-1 absolute bottom-12 bg-surface w-full z-10'>
                                 {categories.map(category =>
