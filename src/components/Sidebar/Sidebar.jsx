@@ -59,7 +59,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
     }, []);
 
     return (
-        <aside className={`sidebar sm:sticky fixed top-0 bg-surface max-w-[250px] w-full h-dvh ${openMenu ? '' : 'close'} transition-all duration-200 shadow-lg z-11 sm:z-0`}>
+        <aside className={`sidebar sm:sticky fixed top-0 bg-surface max-w-[250px] w-full h-dvh overflow-hidden ${openMenu ? '' : 'close'} transition-all duration-200 shadow-lg z-11 sm:z-0`}>
 
             <div className="sidebar__account flex items-center justify-between p-2 h-30 border-b border-b-surface-3">
                 <div className='flex items-center gap-2'>
@@ -68,7 +68,7 @@ const Sidebar = ({ openMenu, setOpenMenu }) => {
                     </div>
                     <div className="sidebar__info-user flex flex-col text-sm text-text-secondary">
                         <span className="name-user">{nameUser}</span>
-                        <span className="email-user">{emailUser}</span>
+                        <span className="email-user">{emailUser.split('@gmail.com')}</span>
                     </div>
                 </div>
 
